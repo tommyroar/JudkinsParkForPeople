@@ -3,7 +3,8 @@ import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapb
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, Trees, Navigation, MapPin } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw } from 'lucide-react'
+import { CHAPTERS } from './chapters.js'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
@@ -21,89 +22,6 @@ const CORRIDOR_GEOJSON = {
     ],
   },
 }
-
-const CHAPTERS = [
-  {
-    id: 'mission',
-    type: 'intro',
-    title: 'Judkins Park For People',
-    content:
-      'The **Judkins Park Light Rail Station** opens March 28, 2026 — bringing thousands of daily riders to one of Seattle\'s most vibrant neighborhoods.\n\nBut the streets around it were built for cars. **This is a proposal to change that.**',
-    mapState: { longitude: -122.3052, latitude: 47.5988, zoom: 13.5, pitch: 0, bearing: 0 },
-  },
-  {
-    id: 'gateway',
-    type: 'chapter',
-    title: '20th Ave S Gateway',
-    subtitle: 'Entry Point: S Jackson St',
-    content:
-      'S Jackson Street is the commercial heart of the Central District. Today, 20th Ave S funnels cut-through car traffic at speed through a walkable neighborhood.\n\nProposal: Restrict turn movements, add a **protected crossing**, and widen sidewalks to match the new foot traffic from light rail.',
-    icon: Navigation,
-    color: '#ea580c',
-    mapState: { longitude: -122.3067, latitude: 47.6037, zoom: 16.5, pitch: 50, bearing: 10 },
-    marker: { longitude: -122.3067, latitude: 47.6037 },
-  },
-  {
-    id: 'school',
-    type: 'chapter',
-    title: 'School Safety Zone',
-    subtitle: 'HAWK Signal \u2022 20th Ave S & S Weller St',
-    content:
-      '**Hamlin Robinson School** serves students with dyslexia. Families cross 20th Ave S every day — on foot and by bike — with no protected crossing.\n\nProposal: A **HAWK signal** (High-Intensity Activated Crosswalk) — the same proven technology protecting school zones citywide.',
-    icon: AlertTriangle,
-    color: '#16a34a',
-    mapState: { longitude: -122.3058, latitude: 47.6012, zoom: 17, pitch: 45, bearing: -15 },
-    marker: { longitude: -122.3058, latitude: 47.6012 },
-  },
-  {
-    id: 'station',
-    type: 'chapter',
-    title: 'Station Access',
-    subtitle: 'HAWK Signal \u2022 21st Ave S & S Judkins St',
-    content:
-      'The new **Judkins Park Light Rail Station** sits at the foot of the I-90 lid. The nearest safe crossing is over 200 feet from the platform entrance — an unacceptable gap for a busy transit hub.\n\nProposal: A **HAWK signal** at 21st Ave S creates a direct, protected path from the corridor to the platform.',
-    icon: Train,
-    color: '#7c3aed',
-    mapState: { longitude: -122.3035, latitude: 47.5966, zoom: 16.5, pitch: 55, bearing: -25 },
-    marker: { longitude: -122.3035, latitude: 47.5929 },
-  },
-  {
-    id: 'dearborn',
-    type: 'chapter',
-    title: 'Flow Control',
-    subtitle: 'Roundabout \u2022 20th Ave S & S Dearborn St',
-    content:
-      '20th & Dearborn is a high-speed cut-through for I-90 traffic. This residential block carries thousands of vehicles daily, threatening families walking to Jefferson Park and Garfield High School.\n\nProposal: A **mini-roundabout** to slow speeds, eliminate signal wait times, and free curb space for planted buffers.',
-    icon: RotateCcw,
-    color: '#1e3a8a',
-    mapState: { longitude: -122.3050, latitude: 47.5991, zoom: 17, pitch: 40, bearing: 20 },
-    marker: { longitude: -122.3050, latitude: 47.5991 },
-  },
-  {
-    id: 'park',
-    type: 'chapter',
-    title: 'Park Integration',
-    subtitle: 'Roundabout \u2022 20th Ave S & S Charles St',
-    content:
-      '**Judkins Park** is home to Umoja Fest, community gardens, and one of the city\'s most beloved playgrounds. The park entrance at 20th & Charles is easy to miss at speed.\n\nProposal: A **signature roundabout** with public art and a planted median to calm traffic and celebrate this community anchor.',
-    icon: Trees,
-    color: '#16a34a',
-    mapState: { longitude: -122.3044, latitude: 47.5965, zoom: 17, pitch: 35, bearing: -10 },
-    marker: { longitude: -122.3044, latitude: 47.5965 },
-  },
-  {
-    id: 'blueprint',
-    type: 'chapter',
-    title: 'The Full Blueprint',
-    subtitle: 'A Complete Transit Portal',
-    content:
-      'Five targeted interventions. One coherent vision.\n\n**20th Ave S** becomes a **Transit Portal** — calm, safe, and welcoming — connecting the Central District to the new light rail era.\n\nTwo HAWK signals. Two roundabouts. One redesigned gateway.',
-    icon: MapPin,
-    color: '#1e3a8a',
-    mapState: { longitude: -122.3052, latitude: 47.5988, zoom: 14.5, pitch: 30, bearing: 0 },
-    showCorridor: true,
-  },
-]
 
 const LEGEND = [
   { label: 'HAWK Signal', color: '#16a34a', icon: AlertTriangle },
