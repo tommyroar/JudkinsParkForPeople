@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Mapbox GL CSS */
+@import "mapbox-gl/dist/mapbox-gl.css";
+
+/* Ensure map container fills its parent */
+.mapboxgl-map {
+  width: 100%;
+  height: 100%;
+}
