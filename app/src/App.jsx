@@ -195,7 +195,15 @@ export default function App() {
             </Step>
           ))}
         </Scrollama>
-        <div className="min-h-screen" />
+        <div className="min-h-screen flex items-center justify-center">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="text-sm text-white/60 hover:text-white/90 transition-colors duration-200 flex items-center gap-2 tracking-wide"
+          >
+            <span>↑</span>
+            <span>Return to start</span>
+          </button>
+        </div>
       </div>
     </div>
   )
