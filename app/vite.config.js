@@ -69,7 +69,7 @@ function markdownPlugin() {
 export default defineConfig({
   plugins: [react(), tailwindcss(), markdownPlugin()],
   server: {
-    allowedHosts: ['tommys-mac-mini.tail59a169.ts.net'],
+    allowedHosts: ['tommys-mac-mini.tail59a169.ts.net', 'Tommys-Mac-mini.local'],
   },
   test: {
     environment: 'jsdom',
