@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapbox'
+import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
@@ -191,8 +191,6 @@ export default function App() {
           mapStyle="mapbox://styles/mapbox/streets-v12"
           style={{ width: '100%', height: '100%' }}
         >
-          <NavigationControl position="top-right" />
-
           {showCorridor && (
             <Source id="corridor" type="geojson" data={CORRIDOR_GEOJSON}>
               <Layer
