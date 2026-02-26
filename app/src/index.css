@@ -8,3 +8,11 @@
   width: 100%;
   height: 100%;
 }
+
+/* Images embedded in chapter Markdown (optional — cards without images are unaffected) */
+.prose img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin-top: 0.75rem;
+  display: block;
+}
