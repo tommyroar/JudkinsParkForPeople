@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -108,9 +108,29 @@ function Legend() {
   )
 }
 
+const LAST_CHAPTER_ID = CHAPTERS[CHAPTERS.length - 1].id
+
 export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const mapRef = useRef(null)
+  const lastSectionRef = useRef(null)
+
+  // Snap to last section top on entry, bounce back on over-scroll
+  useEffect(() => {
+    if (activeChapterId !== LAST_CHAPTER_ID || !lastSectionRef.current) return
+
+    const lockY = lastSectionRef.current.offsetTop
+    window.scrollTo({ top: lockY, behavior: 'smooth' })
+
+    const handleScroll = () => {
+      if (window.scrollY > lockY + 60) {
+        window.scrollTo({ top: lockY, behavior: 'smooth' })
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [activeChapterId])
 
   const handleStepEnter = useCallback(({ data }) => {
     const chapter = CHAPTERS.find(c => c.id === data)
@@ -191,7 +211,10 @@ export default function App() {
         <Scrollama onStepEnter={handleStepEnter} offset={0.5}>
           {CHAPTERS.map((chapter, index) => (
             <Step data={chapter.id} key={chapter.id}>
-              <section className="min-h-screen flex items-center px-6 md:px-12 py-16">
+              <section
+                ref={index === CHAPTERS.length - 1 ? lastSectionRef : null}
+                className="min-h-screen flex items-center px-6 md:px-12 py-16"
+              >
                 <AnimatePresence>
                   {activeChapter.id === chapter.id &&
                     (chapter.type === 'intro' ? (
