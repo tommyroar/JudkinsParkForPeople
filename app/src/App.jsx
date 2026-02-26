@@ -99,7 +99,7 @@ function Legend() {
   )
 }
 
-function ReturnToStartButton({ visible }) {
+function ReturnToStartButton({ visible, onReturn }) {
   return (
     <AnimatePresence>
       {visible && (
@@ -109,7 +109,7 @@ function ReturnToStartButton({ visible }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={onReturn}
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl font-semibold text-sm text-white tracking-wide"
           style={{ backgroundColor: '#1e3a8a' }}
           aria-label="Return to start"
@@ -123,13 +123,24 @@ function ReturnToStartButton({ visible }) {
 }
 
 const LAST_CHAPTER_ID = CHAPTERS[CHAPTERS.length - 1].id
+const FIRST_CHAPTER_ID = CHAPTERS[0].id
 
 export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const [showReturnButton, setShowReturnButton] = useState(false)
   const mapRef = useRef(null)
+  const isReturningRef = useRef(false)
 
   const handleStepEnter = useCallback(({ data }) => {
+    // While scrolling back to start, suppress intermediate card animations.
+    // Clear the flag once the intro chapter is reached.
+    if (isReturningRef.current) {
+      if (data === FIRST_CHAPTER_ID) {
+        isReturningRef.current = false
+        setActiveChapterId(FIRST_CHAPTER_ID)
+      }
+      return
+    }
     const chapter = CHAPTERS.find(c => c.id === data)
     if (!chapter) return
     setActiveChapterId(chapter.id)
@@ -158,6 +169,12 @@ export default function App() {
     if (data === LAST_CHAPTER_ID && direction === 'up') {
       setShowReturnButton(false)
     }
+  }, [])
+
+  const handleReturn = useCallback(() => {
+    isReturningRef.current = true
+    setShowReturnButton(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const activeChapter = CHAPTERS.find(c => c.id === activeChapterId) ?? CHAPTERS[0]
@@ -217,7 +234,7 @@ export default function App() {
       </div>
 
       <Legend />
-      <ReturnToStartButton visible={showReturnButton} />
+      <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
 
       {/* Scrollytelling story track */}
       <div className="relative z-10">
