@@ -219,7 +219,7 @@ export default function App() {
                 ref={index === CHAPTERS.length - 1 ? lastSectionRef : null}
                 className={`min-h-screen flex px-6 md:px-12 ${
                   index === CHAPTERS.length - 1
-                    ? 'items-end pb-6'
+                    ? 'items-end pb-[calc(50vh+24px)]'
                     : 'items-center py-16'
                 }`}
               >
