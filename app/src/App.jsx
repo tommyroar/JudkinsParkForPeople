@@ -1,9 +1,9 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
@@ -53,7 +53,7 @@ function IntroCard({ chapter }) {
   )
 }
 
-function ChapterCard({ chapter, isLast }) {
+function ChapterCard({ chapter }) {
   const Icon = chapter.icon
   return (
     <motion.div
@@ -76,15 +76,6 @@ function ChapterCard({ chapter, isLast }) {
       <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown>{chapter.content}</ReactMarkdown>
       </div>
-      {isLast && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1.5 tracking-wide"
-        >
-          <span>↑</span>
-          <span>Return to start</span>
-        </button>
-      )}
     </motion.div>
   )
 }
@@ -108,41 +99,43 @@ function Legend() {
   )
 }
 
+function ReturnToStartButton({ visible }) {
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          key="return-to-start"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 24 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl font-semibold text-sm text-white tracking-wide"
+          style={{ backgroundColor: '#1e3a8a' }}
+          aria-label="Return to start"
+        >
+          <ArrowUp size={16} strokeWidth={2.5} />
+          Return to start
+        </motion.button>
+      )}
+    </AnimatePresence>
+  )
+}
+
 const LAST_CHAPTER_ID = CHAPTERS[CHAPTERS.length - 1].id
 
 export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
+  const [showReturnButton, setShowReturnButton] = useState(false)
   const mapRef = useRef(null)
-  const lastSectionRef = useRef(null)
-  const lockYRef = useRef(null)
-
-  // Bounce back if user tries to scroll past the lock point
-  useEffect(() => {
-    if (activeChapterId !== LAST_CHAPTER_ID) return
-
-    const handleScroll = () => {
-      const lockY = lockYRef.current
-      if (lockY !== null && window.scrollY > lockY + 60) {
-        window.scrollTo({ top: lockY, behavior: 'smooth' })
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [activeChapterId])
 
   const handleStepEnter = useCallback(({ data }) => {
     const chapter = CHAPTERS.find(c => c.id === data)
     if (!chapter) return
     setActiveChapterId(chapter.id)
-    if (chapter.id === LAST_CHAPTER_ID && lastSectionRef.current) {
-      const correctLockY = lastSectionRef.current.offsetTop - window.innerHeight * 0.5
-      lockYRef.current = correctLockY
-      if (window.scrollY > correctLockY + 60) {
-        window.scrollTo({ top: correctLockY, behavior: 'smooth' })
-      }
-    } else {
-      lockYRef.current = null
+    // Hide button when scrolling back into the last chapter
+    if (chapter.id === LAST_CHAPTER_ID) {
+      setShowReturnButton(false)
     }
     if (mapRef.current) {
       mapRef.current.flyTo({
@@ -153,6 +146,17 @@ export default function App() {
         duration: 1800,
         essential: true,
       })
+    }
+  }, [])
+
+  const handleStepExit = useCallback(({ data, direction }) => {
+    // Show button when the last chapter scrolls off the top (user scrolled past it)
+    if (data === LAST_CHAPTER_ID && direction === 'down') {
+      setShowReturnButton(true)
+    }
+    // Hide button if the user scrolls back up into the last chapter
+    if (data === LAST_CHAPTER_ID && direction === 'up') {
+      setShowReturnButton(false)
     }
   }, [])
 
@@ -213,26 +217,20 @@ export default function App() {
       </div>
 
       <Legend />
+      <ReturnToStartButton visible={showReturnButton} />
 
       {/* Scrollytelling story track */}
       <div className="relative z-10">
-        <Scrollama onStepEnter={handleStepEnter} offset={0.5}>
-          {CHAPTERS.map((chapter, index) => (
+        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} offset={0.5}>
+          {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
-              <section
-                ref={index === CHAPTERS.length - 1 ? lastSectionRef : null}
-                className={`min-h-screen flex px-6 md:px-12 ${
-                  index === CHAPTERS.length - 1
-                    ? 'items-end pb-[calc(50vh+24px)]'
-                    : 'items-center py-16'
-                }`}
-              >
+              <section className="min-h-screen flex items-center py-16 px-6 md:px-12">
                 <AnimatePresence>
                   {activeChapter.id === chapter.id &&
                     (chapter.type === 'intro' ? (
                       <IntroCard key={chapter.id} chapter={chapter} />
                     ) : (
-                      <ChapterCard key={chapter.id} chapter={chapter} isLast={index === CHAPTERS.length - 1} />
+                      <ChapterCard key={chapter.id} chapter={chapter} />
                     ))}
                 </AnimatePresence>
               </section>
