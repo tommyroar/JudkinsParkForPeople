@@ -15,3 +15,9 @@ The repository currently serves as a specification and blueprint for a visualiza
 - **Development Blueprint**: Use `PROJECT.md` to initialize the project using React 19, Vite, Tailwind CSS, and Mapbox.
 - **Scrollytelling Engine**: The project is designed to use scroll-triggered map transitions to tell the story of the 20th Ave S "Transit Portal".
 - **Interaction Model**: Leverages advanced mapping patterns (like the click-buffer from intentcity #1) to ensure high accessibility and mobile-friendliness.
+
+## Deployment Protocol
+- **Staging**: Auto-deploys on any PR targeting `main`. Verify at `https://tommyroar.github.io/JudkinsParkForPeople/staging/`.
+- **Production**: Auto-deploys on merge to `main`. Verify at `https://tommyroar.github.io/JudkinsParkForPeople/`.
+- **Merging PRs**: Tommy merges PRs to `main` himself via the GitHub web console, or explicitly instructs Gemini to merge. Gemini should never merge autonomously without that instruction.
+- **No required reviewers**: The production GitHub environment has no approval gate — deploys run immediately on merge.
