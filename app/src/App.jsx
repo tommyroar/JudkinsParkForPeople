@@ -114,16 +114,15 @@ export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const mapRef = useRef(null)
   const lastSectionRef = useRef(null)
+  const lockYRef = useRef(null)
 
-  // Snap to last section top on entry, bounce back on over-scroll
+  // Bounce back if user tries to scroll past the lock point
   useEffect(() => {
-    if (activeChapterId !== LAST_CHAPTER_ID || !lastSectionRef.current) return
-
-    const lockY = lastSectionRef.current.offsetTop
-    window.scrollTo({ top: lockY, behavior: 'smooth' })
+    if (activeChapterId !== LAST_CHAPTER_ID) return
 
     const handleScroll = () => {
-      if (window.scrollY > lockY + 60) {
+      const lockY = lockYRef.current
+      if (lockY !== null && window.scrollY > lockY + 60) {
         window.scrollTo({ top: lockY, behavior: 'smooth' })
       }
     }
@@ -136,6 +135,11 @@ export default function App() {
     const chapter = CHAPTERS.find(c => c.id === data)
     if (!chapter) return
     setActiveChapterId(chapter.id)
+    if (chapter.id === LAST_CHAPTER_ID) {
+      lockYRef.current = window.scrollY
+    } else {
+      lockYRef.current = null
+    }
     if (mapRef.current) {
       mapRef.current.flyTo({
         center: [chapter.mapState.longitude, chapter.mapState.latitude],
