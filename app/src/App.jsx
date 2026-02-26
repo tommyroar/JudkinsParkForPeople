@@ -135,8 +135,12 @@ export default function App() {
     const chapter = CHAPTERS.find(c => c.id === data)
     if (!chapter) return
     setActiveChapterId(chapter.id)
-    if (chapter.id === LAST_CHAPTER_ID) {
-      lockYRef.current = window.scrollY
+    if (chapter.id === LAST_CHAPTER_ID && lastSectionRef.current) {
+      const correctLockY = lastSectionRef.current.offsetTop - window.innerHeight * 0.5
+      lockYRef.current = correctLockY
+      if (window.scrollY > correctLockY + 60) {
+        window.scrollTo({ top: correctLockY, behavior: 'smooth' })
+      }
     } else {
       lockYRef.current = null
     }
