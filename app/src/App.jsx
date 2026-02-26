@@ -53,7 +53,7 @@ function IntroCard({ chapter }) {
   )
 }
 
-function ChapterCard({ chapter }) {
+function ChapterCard({ chapter, isLast }) {
   const Icon = chapter.icon
   return (
     <motion.div
@@ -76,6 +76,15 @@ function ChapterCard({ chapter }) {
       <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown>{chapter.content}</ReactMarkdown>
       </div>
+      {isLast && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1.5 tracking-wide"
+        >
+          <span>↑</span>
+          <span>Return to start</span>
+        </button>
+      )}
     </motion.div>
   )
 }
@@ -180,7 +189,7 @@ export default function App() {
       {/* Scrollytelling story track */}
       <div className="relative z-10">
         <Scrollama onStepEnter={handleStepEnter} offset={0.5}>
-          {CHAPTERS.map(chapter => (
+          {CHAPTERS.map((chapter, index) => (
             <Step data={chapter.id} key={chapter.id}>
               <section className="min-h-screen flex items-center px-6 md:px-12 py-16">
                 <AnimatePresence>
@@ -188,22 +197,14 @@ export default function App() {
                     (chapter.type === 'intro' ? (
                       <IntroCard key={chapter.id} chapter={chapter} />
                     ) : (
-                      <ChapterCard key={chapter.id} chapter={chapter} />
+                      <ChapterCard key={chapter.id} chapter={chapter} isLast={index === CHAPTERS.length - 1} />
                     ))}
                 </AnimatePresence>
               </section>
             </Step>
           ))}
         </Scrollama>
-        <div className="min-h-screen flex items-center justify-center">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-sm text-white/60 hover:text-white/90 transition-colors duration-200 flex items-center gap-2 tracking-wide"
-          >
-            <span>↑</span>
-            <span>Return to start</span>
-          </button>
-        </div>
+        <div className="min-h-screen" />
       </div>
     </div>
   )
