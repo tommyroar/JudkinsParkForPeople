@@ -217,7 +217,11 @@ export default function App() {
             <Step data={chapter.id} key={chapter.id}>
               <section
                 ref={index === CHAPTERS.length - 1 ? lastSectionRef : null}
-                className="min-h-screen flex items-center px-6 md:px-12 py-16"
+                className={`min-h-screen flex px-6 md:px-12 ${
+                  index === CHAPTERS.length - 1
+                    ? 'items-end pb-[75vh]'
+                    : 'items-center py-16'
+                }`}
               >
                 <AnimatePresence>
                   {activeChapter.id === chapter.id &&
