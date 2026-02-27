@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://tommyroar.github.io/JudkinsParkForPeople/
+      url: https://judkinsparkforpeople.org/
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -34,7 +34,7 @@ jobs:
         working-directory: app
 
       - name: Build SPA (production)
-        run: npm run build -- --base=/JudkinsParkForPeople/ --outDir ../dist-production/
+        run: npm run build -- --base=/ --outDir ../dist-production/
         working-directory: app
         env:
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
