@@ -3,13 +3,13 @@ id: mission
 type: intro
 title: Judkins Park For People
 mapState:
-  longitude: -122.3052
-  latitude: 47.5988
+  longitude: -122.3045
+  latitude: 47.5903
   zoom: 13.5
   pitch: 0
   bearing: 0
 ---
 
-The **Judkins Park Light Rail Station** opens March 28, 2026 — bringing thousands of daily riders to one of Seattle's most vibrant neighborhoods.
+The **Judkins Park Light Rail Station** opens March 28, 2026 — bringing thousands of daily riders to one of Seattle's most vibrant, diverse, and transit-starved neighborhoods.
 
 But the streets around it were built for cars. **This is a proposal to change that.**

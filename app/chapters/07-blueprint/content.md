@@ -5,7 +5,6 @@ title: The Full Blueprint
 subtitle: A Complete Transit Portal
 icon: MapPin
 color: '#1e3a8a'
-showCorridor: true
 mapState:
   longitude: -122.3052
   latitude: 47.5988

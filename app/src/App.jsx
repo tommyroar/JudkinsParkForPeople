@@ -38,10 +38,6 @@ function IntroCard({ chapter }) {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-white/60 max-w-md w-full"
     >
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-1.5 h-8 rounded-full" style={{ backgroundColor: '#1e3a8a' }} />
-        <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Advocacy Initiative</span>
-      </div>
       <h1 className="text-3xl font-bold mb-4" style={{ color: '#1e3a8a' }}>
         {chapter.title}
       </h1>

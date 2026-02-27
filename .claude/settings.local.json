@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(head:*)",
+      "Bash(npm test:*)",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_navigate",
+      "Bash(pkill:*)",
+      "Bash(cd:*)",
+      "Bash(cd /tmp/jpp-issue-1 && git push origin feat/issue-1-scrollytelling 2>&1)",
+      "Bash(cp:*)",
+      "mcp__playwright__browser_console_messages",
+      "Bash(cd /tmp/jpp-rts/app && npm test 2>&1 && npm run lint 2>&1)",
+      "mcp__playwright__browser_evaluate",
+      "Bash(echo:*)",
+      "Bash(pgrep:*)",
+      "Bash(gh run:*)",
+      "Bash(npm:*)",
+      "Bash(ps:*)"
+    ]
+  }
+}
