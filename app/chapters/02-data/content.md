@@ -9,12 +9,12 @@ showCollisionPoints: true
 mapState:
   longitude: -122.3035
   latitude: 47.5966
-  zoom: 14
-  pitch: 0
-  bearing: 0
+  zoom: 13
+  pitch: 50
+  bearing: -25
 ---
 
-Every dot is a real crash. **Red** = fatality. **Orange** = serious injury. **Yellow** = pedestrian involved. **Blue** = injury collision.
+Every dot is a real crash. Custom markers = pedestrian fatality. **Yellow** = pedestrian involved. **Orange** = serious injury. **Blue** = other injury.
 
 Within one mile of the future station, SDOT recorded **8,794 collisions** between 2015 and 2025. **17 people were killed. 247 were seriously injured.**
 

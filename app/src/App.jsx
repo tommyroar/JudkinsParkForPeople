@@ -88,25 +88,31 @@ function IntroCard({ chapter }) {
   )
 }
 
-function ChapterCard({ chapter }) {
+function ChapterCard({ chapter, progress = 1 }) {
   const Icon = chapter.icon
+  const bgOpacity = chapter.showCollisionPoints ? progress * 0.65 : 0.85
   return (
     <motion.div
       initial={{ opacity: 0, x: -24 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -24 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="bg-white/85 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/60 max-w-sm w-full"
+      style={{ backgroundColor: `rgba(255,255,255,${bgOpacity})` }}
+      className="backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/60 max-w-sm w-full"
     >
-      <div
-        className="flex items-center justify-center w-10 h-10 rounded-full mb-3 shadow-sm"
-        style={{ backgroundColor: chapter.color }}
-      >
-        <Icon size={20} color="white" strokeWidth={2} />
-      </div>
-      <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: chapter.color }}>
-        {chapter.subtitle}
-      </p>
+      {!chapter.showCollisionPoints && (
+        <>
+          <div
+            className="flex items-center justify-center w-10 h-10 rounded-full mb-3 shadow-sm"
+            style={{ backgroundColor: chapter.color }}
+          >
+            <Icon size={20} color="white" strokeWidth={2} />
+          </div>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: chapter.color }}>
+            {chapter.subtitle}
+          </p>
+        </>
+      )}
       <h2 className="text-xl font-bold text-gray-900 mb-3">{chapter.title}</h2>
       <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
@@ -164,11 +170,52 @@ export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const [showReturnButton, setShowReturnButton] = useState(false)
   const [collisionGeoJSON, setCollisionGeoJSON] = useState(null)
+  const [dataProgress, setDataProgress] = useState(0)
   const mapRef = useRef(null)
   const isReturningRef = useRef(false)
 
   useEffect(() => {
     fetchCollisionPoints().then(setCollisionGeoJSON).catch(console.error)
+  }, [])
+
+  const handleStepProgress = useCallback(({ data, progress }) => {
+    if (data === 'data') setDataProgress(progress)
+  }, [])
+
+  const handleMapLoad = useCallback(() => {
+    const map = mapRef.current?.getMap()
+    if (!map) return
+    const img = new Image()
+    img.onload = () => {
+      const w = img.naturalWidth, h = img.naturalHeight
+      const canvas = document.createElement('canvas')
+      canvas.width = w
+      canvas.height = h
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      const imageData = ctx.getImageData(0, 0, w, h)
+      const d = imageData.data
+      const bgR = d[0], bgG = d[1], bgB = d[2]
+      const TOL = 40
+      const visited = new Uint8Array(w * h)
+      const queue = [0, w - 1, (h - 1) * w, (h - 1) * w + w - 1]
+      let qi = 0
+      while (qi < queue.length) {
+        const idx = queue[qi++]
+        if (visited[idx]) continue
+        visited[idx] = 1
+        const pi = idx * 4
+        if (Math.abs(d[pi] - bgR) + Math.abs(d[pi + 1] - bgG) + Math.abs(d[pi + 2] - bgB) > TOL) continue
+        d[pi + 3] = 0
+        const x = idx % w, y = Math.floor(idx / w)
+        if (x > 0) queue.push(idx - 1)
+        if (x < w - 1) queue.push(idx + 1)
+        if (y > 0) queue.push(idx - w)
+        if (y < h - 1) queue.push(idx + w)
+      }
+      if (!map.hasImage('ped-fatality')) map.addImage('ped-fatality', imageData)
+    }
+    img.src = '/icons/ped-fatality.png'
   }, [])
 
   const handleStepEnter = useCallback(({ data }) => {
@@ -231,25 +278,39 @@ export default function App() {
           initialViewState={CHAPTERS[0].mapState}
           mapStyle="mapbox://styles/mapbox/streets-v12"
           style={{ width: '100%', height: '100%' }}
+          onLoad={handleMapLoad}
         >
           {showCollisionPoints && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
+              {/* All non-fatal collisions: circles */}
               <Layer
-                id="collision-points"
+                id="collision-circles"
                 type="circle"
+                filter={['==', ['get', 'FATALITIES'], 0]}
                 paint={{
                   'circle-radius': 5,
                   'circle-color': [
                     'case',
-                    ['>', ['get', 'FATALITIES'], 0], '#dc2626',
-                    ['>', ['get', 'SERIOUSINJURIES'], 0], '#ea580c',
                     ['>', ['get', 'PEDCOUNT'], 0], '#eab308',
+                    ['>', ['get', 'SERIOUSINJURIES'], 0], '#ea580c',
                     '#3b82f6',
                   ],
                   'circle-opacity': 0.8,
                   'circle-stroke-width': 1,
                   'circle-stroke-color': '#ffffff',
                   'circle-stroke-opacity': 0.6,
+                }}
+              />
+              {/* Pedestrian fatalities: custom icon, rendered on top */}
+              <Layer
+                id="collision-ped-fatality"
+                type="symbol"
+                filter={['>', ['get', 'FATALITIES'], 0]}
+                layout={{
+                  'icon-image': 'ped-fatality',
+                  'icon-size': 0.03,
+                  'icon-allow-overlap': true,
+                  'icon-anchor': 'bottom',
                 }}
               />
             </Source>
@@ -295,12 +356,12 @@ export default function App() {
         </Map>
       </div>
 
-      <Legend />
+      {!showCollisionPoints && <Legend />}
       <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
 
       {/* Scrollytelling story track */}
       <div className="relative z-10">
-        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} offset={0.5}>
+        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
               <section className="min-h-screen flex items-center py-16 px-6 md:px-12">
@@ -309,7 +370,7 @@ export default function App() {
                     (chapter.type === 'intro' ? (
                       <IntroCard key={chapter.id} chapter={chapter} />
                     ) : (
-                      <ChapterCard key={chapter.id} chapter={chapter} />
+                      <ChapterCard key={chapter.id} chapter={chapter} progress={chapter.id === 'data' ? dataProgress : 1} />
                     ))}
                 </AnimatePresence>
               </section>
