@@ -23,6 +23,19 @@ const CORRIDOR_GEOJSON = {
   },
 }
 
+// 0.5-mile casualty impact circle — centered on Judkins Park Station
+const CIRCLE_GEOJSON = (() => {
+  const [lng, lat] = [-122.3035, 47.5966]
+  const latR = 0.5 / 69.11
+  const lngR = 0.5 / (69.11 * Math.cos((lat * Math.PI) / 180))
+  const steps = 64
+  const coords = Array.from({ length: steps + 1 }, (_, i) => {
+    const a = (i / steps) * 2 * Math.PI
+    return [lng + lngR * Math.cos(a), lat + latR * Math.sin(a)]
+  })
+  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] } }
+})()
+
 const LEGEND = [
   { label: 'HAWK Signal', color: '#16a34a', icon: AlertTriangle },
   { label: 'Roundabout', color: '#1e3a8a', icon: RotateCcw },
@@ -175,6 +188,7 @@ export default function App() {
 
   const activeChapter = CHAPTERS.find(c => c.id === activeChapterId) ?? CHAPTERS[0]
   const showCorridor = activeChapter?.showCorridor ?? false
+  const showCircle = activeChapter?.showCircle ?? false
 
   return (
     <div className="relative">
@@ -187,6 +201,21 @@ export default function App() {
           mapStyle="mapbox://styles/mapbox/streets-v12"
           style={{ width: '100%', height: '100%' }}
         >
+          {showCircle && (
+            <Source id="half-mile-circle" type="geojson" data={CIRCLE_GEOJSON}>
+              <Layer
+                id="circle-fill"
+                type="fill"
+                paint={{ 'fill-color': '#dc2626', 'fill-opacity': 0.12 }}
+              />
+              <Layer
+                id="circle-stroke"
+                type="line"
+                paint={{ 'line-color': '#dc2626', 'line-width': 2, 'line-opacity': 0.7 }}
+              />
+            </Source>
+          )}
+
           {showCorridor && (
             <Source id="corridor" type="geojson" data={CORRIDOR_GEOJSON}>
               <Layer
