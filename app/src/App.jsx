@@ -307,7 +307,7 @@ export default function App() {
               <Layer
                 id="collision-ped-fatality"
                 type="symbol"
-                filter={['>', ['get', 'FATALITIES'], 0]}
+                filter={['all', ['>', ['get', 'FATALITIES'], 0], ['>', ['get', 'PEDCOUNT'], 0]]}
                 layout={{
                   'icon-image': 'ped-fatality',
                   'icon-size': 0.03,
