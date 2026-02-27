@@ -33,7 +33,7 @@ jobs:
         working-directory: app
 
       - name: Build SPA (staging)
-        run: npm run build -- --base=/JudkinsParkForPeople/staging/ --outDir ../dist-staging/
+        run: npm run build -- --base=/staging/ --outDir ../dist-staging/
         working-directory: app
         env:
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
@@ -56,5 +56,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '**Staging preview deployed:** https://tommyroar.github.io/JudkinsParkForPeople/staging/'
+              body: '**Staging preview deployed:** https://judkinsparkforpeople.org/staging/'
             })
