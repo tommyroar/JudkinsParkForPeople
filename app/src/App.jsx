@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -23,18 +23,36 @@ const CORRIDOR_GEOJSON = {
   },
 }
 
-// 0.5-mile casualty impact circle — centered on Judkins Park Station
-const CIRCLE_GEOJSON = (() => {
-  const [lng, lat] = [-122.3035, 47.5966]
-  const latR = 0.5 / 69.11
-  const lngR = 0.5 / (69.11 * Math.cos((lat * Math.PI) / 180))
-  const steps = 64
-  const coords = Array.from({ length: steps + 1 }, (_, i) => {
-    const a = (i / steps) * 2 * Math.PI
-    return [lng + lngR * Math.cos(a), lat + latR * Math.sin(a)]
+// Fetches all injury collision points (2015–present) within the 1-mile corridor bbox
+async function fetchCollisionPoints() {
+  const base = 'https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SDOT_Collisions_All_Years/FeatureServer/0/query'
+  const PAGE = 500
+  const params = new URLSearchParams({
+    where: "INCDTTM >= '2015-01-01' AND INJURIES > 0",
+    geometry: JSON.stringify({ xmin: -122.318, ymin: 47.582, xmax: -122.289, ymax: 47.611 }),
+    geometryType: 'esriGeometryEnvelope',
+    inSR: '4326',
+    spatialRel: 'esriSpatialRelIntersects',
+    outFields: 'INJURIES,SERIOUSINJURIES,FATALITIES,PEDCOUNT',
+    returnGeometry: 'true',
+    outSR: '4326',
+    f: 'geojson',
+    resultRecordCount: String(PAGE),
   })
-  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] } }
-})()
+  const features = []
+  let offset = 0
+  let done = false
+  while (!done) {
+    params.set('resultOffset', String(offset))
+    const res = await fetch(`${base}?${params}`)
+    const json = await res.json()
+    const page = json.features ?? []
+    features.push(...page)
+    if (page.length < PAGE) done = true
+    else offset += PAGE
+  }
+  return { type: 'FeatureCollection', features }
+}
 
 const LEGEND = [
   { label: 'HAWK Signal', color: '#16a34a', icon: AlertTriangle },
@@ -137,8 +155,13 @@ const FIRST_CHAPTER_ID = CHAPTERS[0].id
 export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const [showReturnButton, setShowReturnButton] = useState(false)
+  const [collisionGeoJSON, setCollisionGeoJSON] = useState(null)
   const mapRef = useRef(null)
   const isReturningRef = useRef(false)
+
+  useEffect(() => {
+    fetchCollisionPoints().then(setCollisionGeoJSON).catch(console.error)
+  }, [])
 
   const handleStepEnter = useCallback(({ data }) => {
     // While scrolling back to start, suppress intermediate card animations.
@@ -188,7 +211,7 @@ export default function App() {
 
   const activeChapter = CHAPTERS.find(c => c.id === activeChapterId) ?? CHAPTERS[0]
   const showCorridor = activeChapter?.showCorridor ?? false
-  const showCircle = activeChapter?.showCircle ?? false
+  const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
 
   return (
     <div className="relative">
@@ -201,17 +224,25 @@ export default function App() {
           mapStyle="mapbox://styles/mapbox/streets-v12"
           style={{ width: '100%', height: '100%' }}
         >
-          {showCircle && (
-            <Source id="half-mile-circle" type="geojson" data={CIRCLE_GEOJSON}>
+          {showCollisionPoints && collisionGeoJSON && (
+            <Source id="collisions" type="geojson" data={collisionGeoJSON}>
               <Layer
-                id="circle-fill"
-                type="fill"
-                paint={{ 'fill-color': '#dc2626', 'fill-opacity': 0.12 }}
-              />
-              <Layer
-                id="circle-stroke"
-                type="line"
-                paint={{ 'line-color': '#dc2626', 'line-width': 2, 'line-opacity': 0.7 }}
+                id="collision-points"
+                type="circle"
+                paint={{
+                  'circle-radius': 5,
+                  'circle-color': [
+                    'case',
+                    ['>', ['get', 'FATALITIES'], 0], '#dc2626',
+                    ['>', ['get', 'SERIOUSINJURIES'], 0], '#ea580c',
+                    ['>', ['get', 'PEDCOUNT'], 0], '#eab308',
+                    '#3b82f6',
+                  ],
+                  'circle-opacity': 0.8,
+                  'circle-stroke-width': 1,
+                  'circle-stroke-color': '#ffffff',
+                  'circle-stroke-opacity': 0.6,
+                }}
               />
             </Source>
           )}
