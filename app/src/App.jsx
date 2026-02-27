@@ -265,8 +265,10 @@ export default function App() {
   }, [])
 
   const activeChapter = CHAPTERS.find(c => c.id === activeChapterId) ?? CHAPTERS[0]
+  const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
+  const showProposals = activeChapterIdx >= 2
 
   return (
     <div className="relative">
@@ -330,7 +332,7 @@ export default function App() {
             </Source>
           )}
 
-          {CHAPTERS.filter(c => c.marker).map(chapter => {
+          {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
             const Icon = chapter.icon
             const isActive = activeChapterId === chapter.id
             return (
@@ -356,7 +358,7 @@ export default function App() {
         </Map>
       </div>
 
-      {!showCollisionPoints && <Legend />}
+      {showProposals && !showCollisionPoints && <Legend />}
       <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
 
       {/* Scrollytelling story track */}
