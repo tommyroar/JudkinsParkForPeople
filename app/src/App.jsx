@@ -60,6 +60,14 @@ const LEGEND = [
   { label: 'Light Rail', color: '#7c3aed', icon: Train },
 ]
 
+const MD_COMPONENTS = {
+  a: ({ href, children }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+      {children}
+    </a>
+  ),
+}
+
 function IntroCard({ chapter }) {
   return (
     <motion.div
@@ -73,7 +81,7 @@ function IntroCard({ chapter }) {
         {chapter.title}
       </h1>
       <div className="text-gray-700 leading-relaxed prose max-w-none">
-        <ReactMarkdown>{chapter.content}</ReactMarkdown>
+        <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
       <p className="mt-5 text-xs text-gray-400 font-medium tracking-wide">Scroll to explore the proposal ↓</p>
     </motion.div>
@@ -101,7 +109,7 @@ function ChapterCard({ chapter }) {
       </p>
       <h2 className="text-xl font-bold text-gray-900 mb-3">{chapter.title}</h2>
       <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
-        <ReactMarkdown>{chapter.content}</ReactMarkdown>
+        <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
     </motion.div>
   )
