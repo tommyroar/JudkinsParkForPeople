@@ -6,14 +6,14 @@ subtitle: 'Entry Point: S Jackson St'
 icon: Navigation
 color: '#ea580c'
 mapState:
-  longitude: -122.3067
-  latitude: 47.6037
+  longitude: -122.306348
+  latitude: 47.597486
   zoom: 16.5
   pitch: 50
   bearing: 10
 marker:
-  longitude: -122.3067
-  latitude: 47.6037
+  longitude: -122.306348
+  latitude: 47.597486
 ---
 
 S Jackson Street is the commercial heart of the Central District. Today, 20th Ave S funnels cut-through car traffic at speed through a walkable neighborhood.
