@@ -158,6 +158,7 @@ function CollisionLegend() {
     { label: 'Pedestrian fatality', isSkull: true },
     { label: 'Pedestrian crash', color: '#eab308' },
     { label: 'Serious injury', color: '#ea580c' },
+    { label: 'All traffic injuries', color: '#3b82f6' },
   ]
   return (
     <div className="fixed bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
@@ -334,7 +335,21 @@ export default function App() {
         >
           {collisionPointsVisible && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
-              {/* All non-fatal collisions: circles */}
+              {/* Other (non-ped, non-serious) injuries: rendered beneath */}
+              <Layer
+                id="collision-circles-other"
+                type="circle"
+                filter={['all', ['==', ['get', 'FATALITIES'], 0], ['==', ['get', 'PEDCOUNT'], 0], ['==', ['get', 'SERIOUSINJURIES'], 0]]}
+                paint={{
+                  'circle-radius': 5,
+                  'circle-color': '#3b82f6',
+                  'circle-opacity': collisionPointsVisible ? 0.5 : 0,
+                  'circle-stroke-width': 1,
+                  'circle-stroke-color': '#ffffff',
+                  'circle-stroke-opacity': collisionPointsVisible ? 0.4 : 0,
+                }}
+              />
+              {/* Pedestrian + serious injury collisions: circles */}
               <Layer
                 id="collision-circles"
                 type="circle"
