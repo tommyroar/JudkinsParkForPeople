@@ -266,7 +266,7 @@ export default function App() {
     if (mapRef.current) {
       const states = chapter.mapStates
       if (states?.length >= 2) {
-        // First leg: quick transition in (1800ms); subsequent legs: slow scenic flight (4000ms each)
+        // First leg: quick transition in (800ms); subsequent legs: scenic flight (3000ms each)
         const flyNext = (idx) => {
           if (idx >= states.length) return
           const s = states[idx]
@@ -275,7 +275,7 @@ export default function App() {
             zoom: s.zoom,
             pitch: s.pitch,
             bearing: s.bearing,
-            duration: idx === 0 ? 1800 : 4000,
+            duration: idx === 0 ? 800 : 3000,
             essential: true,
           })
           if (idx < states.length - 1) {
