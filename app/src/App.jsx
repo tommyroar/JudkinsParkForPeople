@@ -158,7 +158,6 @@ function CollisionLegend() {
     { label: 'Pedestrian fatality', isSkull: true },
     { label: 'Pedestrian crash', color: '#eab308' },
     { label: 'Serious injury', color: '#ea580c' },
-    { label: 'Other injury', color: '#3b82f6' },
   ]
   return (
     <div className="fixed bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
@@ -339,14 +338,13 @@ export default function App() {
               <Layer
                 id="collision-circles"
                 type="circle"
-                filter={['==', ['get', 'FATALITIES'], 0]}
+                filter={['all', ['==', ['get', 'FATALITIES'], 0], ['any', ['>', ['get', 'PEDCOUNT'], 0], ['>', ['get', 'SERIOUSINJURIES'], 0]]]}
                 paint={{
                   'circle-radius': 5,
                   'circle-color': [
                     'case',
                     ['>', ['get', 'PEDCOUNT'], 0], '#eab308',
-                    ['>', ['get', 'SERIOUSINJURIES'], 0], '#ea580c',
-                    '#3b82f6',
+                    '#ea580c',
                   ],
                   'circle-opacity': 0.8 * collisionOpacity,
                   'circle-stroke-width': 1,
