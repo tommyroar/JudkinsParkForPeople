@@ -266,18 +266,11 @@ export default function App() {
     if (mapRef.current) {
       const states = chapter.mapStates
       if (states?.length >= 2) {
-        // Jump to start, then chain slow flyTo through each subsequent waypoint
-        const [start, ...waypoints] = states
-        const segmentDuration = Math.floor(8000 / waypoints.length)
-        mapRef.current.jumpTo({
-          center: [start.longitude, start.latitude],
-          zoom: start.zoom,
-          pitch: start.pitch,
-          bearing: start.bearing,
-        })
+        // Smooth flyTo through all waypoints, chained via moveend
+        const segmentDuration = Math.floor(8000 / states.length)
         const flyNext = (idx) => {
-          if (idx >= waypoints.length) return
-          const s = waypoints[idx]
+          if (idx >= states.length) return
+          const s = states[idx]
           mapRef.current?.flyTo({
             center: [s.longitude, s.latitude],
             zoom: s.zoom,
@@ -286,11 +279,11 @@ export default function App() {
             duration: segmentDuration,
             essential: true,
           })
-          if (idx < waypoints.length - 1) {
+          if (idx < states.length - 1) {
             mapRef.current?.getMap().once('moveend', () => flyNext(idx + 1))
           }
         }
-        setTimeout(() => flyNext(0), 150)
+        flyNext(0)
       } else {
         mapRef.current.flyTo({
           center: [chapter.mapState.longitude, chapter.mapState.latitude],
