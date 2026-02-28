@@ -7,8 +7,8 @@ icon: AlertTriangle
 color: '#ea580c'
 showCollisionPoints: true
 mapState:
-  longitude: -122.3035
-  latitude: 47.5966
+  longitude: -122.302313
+  latitude: 47.590320
   zoom: 13
   pitch: 50
   bearing: -25

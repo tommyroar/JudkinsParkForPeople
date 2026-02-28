@@ -6,14 +6,14 @@ subtitle: 'RRFB • 21st Ave S & S Judkins St'
 icon: Train
 color: '#7c3aed'
 mapState:
-  longitude: -122.3035
-  latitude: 47.5966
+  longitude: -122.302313
+  latitude: 47.590320
   zoom: 16.5
   pitch: 55
   bearing: -25
 marker:
-  longitude: -122.3035
-  latitude: 47.5929
+  longitude: -122.302313
+  latitude: 47.590320
 ---
 
 The new **Judkins Park Light Rail Station** sits at the foot of the I-90 lid. The nearest safe crossing is over 200 feet from the platform entrance — an unacceptable gap for a busy transit hub.
