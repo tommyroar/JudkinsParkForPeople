@@ -16,7 +16,7 @@ mapState:
 
 Every dot on the map is a real crash — see the legend for color coding.
 
-Within one mile of the future station, SDOT recorded **8,794 collisions** between 2015 and 2025. **17 people were killed. 247 were seriously injured.**
+Within one mile of Judkins Park, SDOT recorded **8,794 collisions** between 2015 and 2025. **17 people were killed. 247 were seriously injured.**
 
 Pedestrians are hit hardest: **264 crashes** involving people on foot left **10 dead** and **40 seriously injured** over the same period.
 
