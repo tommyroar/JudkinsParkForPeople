@@ -23,12 +23,12 @@ const CORRIDOR_GEOJSON = {
   },
 }
 
-// Fetches all injury collision points (2015–present) within the 1-mile corridor bbox
+// Fetches all injury and fatality collision points (2015–present) within the 1-mile corridor bbox
 async function fetchCollisionPoints() {
   const base = 'https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SDOT_Collisions_All_Years/FeatureServer/0/query'
   const PAGE = 500
   const params = new URLSearchParams({
-    where: "INCDTTM >= '2015-01-01' AND INJURIES > 0",
+    where: "INCDTTM >= '2015-01-01' AND (INJURIES > 0 OR FATALITIES > 0)",
     geometry: JSON.stringify({ xmin: -122.318, ymin: 47.582, xmax: -122.289, ymax: 47.611 }),
     geometryType: 'esriGeometryEnvelope',
     inSR: '4326',
@@ -59,6 +59,19 @@ const LEGEND = [
   { label: 'Roundabout', color: '#1e3a8a', icon: RotateCcw },
   { label: 'Light Rail', color: '#7c3aed', icon: Train },
 ]
+
+// Skull-in-circle SVG icon for pedestrian fatality map markers and legend
+const SKULL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 40 40">
+  <circle cx="20" cy="20" r="19" fill="#dc2626" stroke="white" stroke-width="2"/>
+  <ellipse cx="20" cy="17" rx="10" ry="11" fill="white"/>
+  <ellipse cx="16" cy="17" rx="2.8" ry="3.2" fill="#dc2626"/>
+  <ellipse cx="24" cy="17" rx="2.8" ry="3.2" fill="#dc2626"/>
+  <ellipse cx="20" cy="21.5" rx="1.8" ry="2" fill="#dc2626"/>
+  <rect x="12" y="24" width="16" height="6" rx="2" fill="white"/>
+  <rect x="14" y="24" width="2.5" height="5" fill="#dc2626"/>
+  <rect x="18.75" y="24" width="2.5" height="5" fill="#dc2626"/>
+  <rect x="23.5" y="24" width="2.5" height="5" fill="#dc2626"/>
+</svg>`
 
 const MD_COMPONENTS = {
   a: ({ href, children }) => (
@@ -140,6 +153,43 @@ function Legend() {
   )
 }
 
+function CollisionLegend() {
+  const ITEMS = [
+    { label: 'Pedestrian fatality', isSkull: true },
+    { label: 'Pedestrian crash', color: '#eab308' },
+    { label: 'Serious injury', color: '#ea580c' },
+    { label: 'Other injury', color: '#3b82f6' },
+  ]
+  return (
+    <div className="fixed bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
+      <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Collisions 2015–2025</p>
+      {ITEMS.map(({ label, isSkull, color }) => (
+        <div key={label} className="flex items-center gap-2 mb-1 last:mb-0">
+          {isSkull ? (
+            <svg width="20" height="20" viewBox="0 0 40 40" className="flex-shrink-0" aria-hidden="true">
+              <circle cx="20" cy="20" r="19" fill="#dc2626" stroke="white" strokeWidth="2"/>
+              <ellipse cx="20" cy="17" rx="10" ry="11" fill="white"/>
+              <ellipse cx="16" cy="17" rx="2.8" ry="3.2" fill="#dc2626"/>
+              <ellipse cx="24" cy="17" rx="2.8" ry="3.2" fill="#dc2626"/>
+              <ellipse cx="20" cy="21.5" rx="1.8" ry="2" fill="#dc2626"/>
+              <rect x="12" y="24" width="16" height="6" rx="2" fill="white"/>
+              <rect x="14" y="24" width="2.5" height="5" fill="#dc2626"/>
+              <rect x="18.75" y="24" width="2.5" height="5" fill="#dc2626"/>
+              <rect x="23.5" y="24" width="2.5" height="5" fill="#dc2626"/>
+            </svg>
+          ) : (
+            <div
+              className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-white shadow-sm"
+              style={{ backgroundColor: color }}
+            />
+          )}
+          <span className="text-xs text-gray-700 font-medium">{label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function ReturnToStartButton({ visible, onReturn }) {
   return (
     <AnimatePresence>
@@ -184,38 +234,16 @@ export default function App() {
 
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
-    if (!map) return
-    const img = new Image()
+    if (!map || map.hasImage('ped-fatality')) return
+    const img = new Image(80, 80)
     img.onload = () => {
-      const w = img.naturalWidth, h = img.naturalHeight
       const canvas = document.createElement('canvas')
-      canvas.width = w
-      canvas.height = h
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0)
-      const imageData = ctx.getImageData(0, 0, w, h)
-      const d = imageData.data
-      const bgR = d[0], bgG = d[1], bgB = d[2]
-      const TOL = 40
-      const visited = new Uint8Array(w * h)
-      const queue = [0, w - 1, (h - 1) * w, (h - 1) * w + w - 1]
-      let qi = 0
-      while (qi < queue.length) {
-        const idx = queue[qi++]
-        if (visited[idx]) continue
-        visited[idx] = 1
-        const pi = idx * 4
-        if (Math.abs(d[pi] - bgR) + Math.abs(d[pi + 1] - bgG) + Math.abs(d[pi + 2] - bgB) > TOL) continue
-        d[pi + 3] = 0
-        const x = idx % w, y = Math.floor(idx / w)
-        if (x > 0) queue.push(idx - 1)
-        if (x < w - 1) queue.push(idx + 1)
-        if (y > 0) queue.push(idx - w)
-        if (y < h - 1) queue.push(idx + w)
-      }
-      if (!map.hasImage('ped-fatality')) map.addImage('ped-fatality', imageData)
+      canvas.width = 80
+      canvas.height = 80
+      canvas.getContext('2d').drawImage(img, 0, 0, 80, 80)
+      map.addImage('ped-fatality', canvas.getContext('2d').getImageData(0, 0, 80, 80), { pixelRatio: 2 })
     }
-    img.src = '/icons/ped-fatality.png'
+    img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(SKULL_SVG)}`
   }, [])
 
   const handleStepEnter = useCallback(({ data }) => {
@@ -310,9 +338,9 @@ export default function App() {
                 filter={['all', ['>', ['get', 'FATALITIES'], 0], ['>', ['get', 'PEDCOUNT'], 0]]}
                 layout={{
                   'icon-image': 'ped-fatality',
-                  'icon-size': 0.03,
+                  'icon-size': 1,
                   'icon-allow-overlap': true,
-                  'icon-anchor': 'bottom',
+                  'icon-anchor': 'center',
                 }}
               />
             </Source>
@@ -359,6 +387,7 @@ export default function App() {
       </div>
 
       {showProposals && !showCollisionPoints && <Legend />}
+      {showCollisionPoints && <CollisionLegend />}
       <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
 
       {/* Scrollytelling story track */}

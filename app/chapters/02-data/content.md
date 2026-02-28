@@ -14,7 +14,7 @@ mapState:
   bearing: -25
 ---
 
-Every dot is a real crash. Custom markers = pedestrian fatality. **Yellow** = pedestrian involved. **Orange** = serious injury. **Blue** = other injury.
+Every dot on the map is a real crash — see the legend for color coding.
 
 Within one mile of the future station, SDOT recorded **8,794 collisions** between 2015 and 2025. **17 people were killed. 247 were seriously injured.**
 
