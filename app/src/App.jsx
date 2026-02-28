@@ -3,7 +3,7 @@ import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, ArrowUp } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
@@ -101,6 +101,67 @@ function IntroCard({ chapter }) {
   )
 }
 
+const SLIDE_VARIANTS = {
+  enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%' }),
+  center: { x: 0 },
+  exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%' }),
+}
+
+function PhotoSlider({ photos }) {
+  const [[idx, dir], setPage] = useState([0, 0])
+  const paginate = (newDir) =>
+    setPage(([prev]) => [(prev + newDir + photos.length) % photos.length, newDir])
+  const jumpTo = (i) =>
+    setPage(([prev]) => [i, i > prev ? 1 : -1])
+  return (
+    <div className="mt-4">
+      <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
+        <AnimatePresence mode="wait" initial={false} custom={dir}>
+          <motion.img
+            key={idx}
+            src={photos[idx].src}
+            alt={photos[idx].alt ?? ''}
+            custom={dir}
+            variants={SLIDE_VARIANTS}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </AnimatePresence>
+        <button
+          onClick={() => paginate(-1)}
+          className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors z-10"
+          aria-label="Previous photo"
+        >
+          <ChevronLeft size={18} strokeWidth={2.5} />
+        </button>
+        <button
+          onClick={() => paginate(1)}
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors z-10"
+          aria-label="Next photo"
+        >
+          <ChevronRight size={18} strokeWidth={2.5} />
+        </button>
+      </div>
+      {photos[idx].alt && (
+        <p className="text-xs text-gray-500 mt-1.5 text-center leading-snug">{photos[idx].alt}</p>
+      )}
+      <div className="flex justify-center gap-1.5 mt-2">
+        {photos.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => jumpTo(i)}
+            className={`w-2 h-2 rounded-full transition-colors ${i === idx ? 'bg-blue-900' : 'bg-gray-300'}`}
+            aria-label={`Photo ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ChapterCard({ chapter, progress = 1 }) {
   const Icon = chapter.icon
   const bgOpacity = chapter.showCollisionPoints ? progress * 0.65 : 0.85
@@ -130,6 +191,7 @@ function ChapterCard({ chapter, progress = 1 }) {
       <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
+      {chapter.photos?.length > 0 && <PhotoSlider photos={chapter.photos} />}
     </motion.div>
   )
 }
