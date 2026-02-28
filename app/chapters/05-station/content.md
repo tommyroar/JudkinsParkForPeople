@@ -2,7 +2,7 @@
 id: station
 type: chapter
 title: Station Access
-subtitle: 'HAWK Signal • 21st Ave S & S Judkins St'
+subtitle: 'RRFB • 21st Ave S & S Judkins St'
 icon: Train
 color: '#7c3aed'
 mapState:
@@ -18,4 +18,4 @@ marker:
 
 The new **Judkins Park Light Rail Station** sits at the foot of the I-90 lid. The nearest safe crossing is over 200 feet from the platform entrance — an unacceptable gap for a busy transit hub.
 
-Proposal: A **HAWK signal** at 21st Ave S creates a direct, protected path from the corridor to the platform.
+Proposal: A **[Rectangular Rapid Flashing Beacon](https://safety.fhwa.dot.gov/provencountermeasures/rrfb.cfm)** (RRFB) at 21st Ave S creates a direct, protected path from the corridor to the platform.

@@ -1,21 +1,37 @@
 ---
 id: gateway
 type: chapter
-title: 20th Ave S Gateway
-subtitle: 'Entry Point: S Jackson St'
+title: A Road Without Controls
+subtitle: 'S Jackson St → S Judkins St'
 icon: Navigation
 color: '#ea580c'
 mapState:
-  longitude: -122.306348
-  latitude: 47.597486
+  longitude: -122.3063
+  latitude: 47.5980
   zoom: 16.5
   pitch: 50
-  bearing: 10
+  bearing: 5
+mapStates:
+  - longitude: -122.3063
+    latitude: 47.5980
+    zoom: 16.5
+    pitch: 50
+    bearing: 5
+  - longitude: -122.305731
+    latitude: 47.591960
+    zoom: 16.5
+    pitch: 50
+    bearing: 20
+  - longitude: -122.3007
+    latitude: 47.5933
+    zoom: 17
+    pitch: 55
+    bearing: 80
 marker:
   longitude: -122.306348
   latitude: 47.597486
 ---
 
-S Jackson Street is the commercial heart of the Central District. Today, 20th Ave S funnels cut-through car traffic at speed through a walkable neighborhood.
+North of Jackson, 20th Ave S has numerous stop signs, stop lights and roundabouts. South of Jackson — all the way to Judkins Street — there are **zero stop signs**. Nothing to slow cut-through traffic moving at speed through a residential neighborhood with hundreds of students walking to school.
 
-Proposal: Restrict turn movements, add a **protected crossing**, and widen sidewalks to match the new foot traffic from light rail.
+Between S Waller St and the crossing at 22nd Ave S, a distance of over half a mile, there are **zero signed or marked crosswalks**. Pedestrians heading to the new light rail station have no safe place to cross.

@@ -17,4 +17,4 @@ Five targeted interventions. One coherent vision.
 
 **20th Ave S** becomes a **Transit Portal** — calm, safe, and welcoming — connecting the Central District to the new light rail era.
 
-Two HAWK signals. Two roundabouts. One redesigned gateway.
+Two RRFBs. Two roundabouts. One redesigned gateway.

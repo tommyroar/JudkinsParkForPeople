@@ -32,15 +32,33 @@ function parseSimpleYaml(yaml) {
     const key = topMatch[1]
     const val = topMatch[2].trim()
     if (val === '') {
-      // Nested object — consume indented lines
-      const nested = {}
       i++
-      while (i < lines.length && /^\s+\w+:/.test(lines[i])) {
-        const nm = lines[i].match(/^\s+(\w+):\s*(.+)$/)
-        if (nm) nested[nm[1]] = parseValue(nm[2].trim())
-        i++
+      if (i < lines.length && /^ {2}-/.test(lines[i])) {
+        // Array of objects — each item starts with '  -'
+        const arr = []
+        while (i < lines.length && /^ {2}-/.test(lines[i])) {
+          const item = {}
+          const inline = lines[i].match(/^ {2}-\s+(\w+):\s*(.+)$/)
+          if (inline) item[inline[1]] = parseValue(inline[2].trim())
+          i++
+          while (i < lines.length && /^ {4}\w+:/.test(lines[i])) {
+            const nm = lines[i].match(/^ {4}(\w+):\s*(.+)$/)
+            if (nm) item[nm[1]] = parseValue(nm[2].trim())
+            i++
+          }
+          arr.push(item)
+        }
+        result[key] = arr
+      } else {
+        // Nested object — consume indented lines
+        const nested = {}
+        while (i < lines.length && /^\s+\w+:/.test(lines[i])) {
+          const nm = lines[i].match(/^\s+(\w+):\s*(.+)$/)
+          if (nm) nested[nm[1]] = parseValue(nm[2].trim())
+          i++
+        }
+        result[key] = nested
       }
-      result[key] = nested
     } else {
       result[key] = parseValue(val)
       i++

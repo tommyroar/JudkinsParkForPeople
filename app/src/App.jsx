@@ -55,7 +55,7 @@ async function fetchCollisionPoints() {
 }
 
 const LEGEND = [
-  { label: 'HAWK Signal', color: '#16a34a', icon: AlertTriangle },
+  { label: 'RRFB', color: '#16a34a', icon: AlertTriangle },
   { label: 'Roundabout', color: '#1e3a8a', icon: RotateCcw },
   { label: 'Light Rail', color: '#7c3aed', icon: Train },
 ]
@@ -264,14 +264,43 @@ export default function App() {
       setShowReturnButton(false)
     }
     if (mapRef.current) {
-      mapRef.current.flyTo({
-        center: [chapter.mapState.longitude, chapter.mapState.latitude],
-        zoom: chapter.mapState.zoom,
-        pitch: chapter.mapState.pitch,
-        bearing: chapter.mapState.bearing,
-        duration: 1800,
-        essential: true,
-      })
+      const states = chapter.mapStates
+      if (states?.length >= 2) {
+        // Jump to start, then chain slow flyTo through each subsequent waypoint
+        const [start, ...waypoints] = states
+        const segmentDuration = Math.floor(8000 / waypoints.length)
+        mapRef.current.jumpTo({
+          center: [start.longitude, start.latitude],
+          zoom: start.zoom,
+          pitch: start.pitch,
+          bearing: start.bearing,
+        })
+        const flyNext = (idx) => {
+          if (idx >= waypoints.length) return
+          const s = waypoints[idx]
+          mapRef.current?.flyTo({
+            center: [s.longitude, s.latitude],
+            zoom: s.zoom,
+            pitch: s.pitch,
+            bearing: s.bearing,
+            duration: segmentDuration,
+            essential: true,
+          })
+          if (idx < waypoints.length - 1) {
+            mapRef.current?.getMap().once('moveend', () => flyNext(idx + 1))
+          }
+        }
+        setTimeout(() => flyNext(0), 150)
+      } else {
+        mapRef.current.flyTo({
+          center: [chapter.mapState.longitude, chapter.mapState.latitude],
+          zoom: chapter.mapState.zoom,
+          pitch: chapter.mapState.pitch,
+          bearing: chapter.mapState.bearing,
+          duration: 1800,
+          essential: true,
+        })
+      }
     }
   }, [])
 
