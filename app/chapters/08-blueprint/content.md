@@ -6,15 +6,13 @@ subtitle: A Complete Transit Portal
 icon: MapPin
 color: '#1e3a8a'
 mapState:
-  longitude: -122.3052
-  latitude: 47.5988
-  zoom: 14.5
+  longitude: -122.3039
+  latitude: 47.5944
+  zoom: 14
   pitch: 30
   bearing: 0
 ---
 
-Five targeted interventions. One coherent vision.
+Five targeted interventions, and Judkins Park transitions from an unsafe jumble of high-speed traffic to a transit-oriented neighborhood, following successful campaigns for [Roosevelt](https://nwgreenways.seattlegreenways.org/connections-to-light-rail/a-vision-for-roosevelt-way-n/) and U District stations, connecting the Central District to the new light rail era.
 
-**20th Ave S** becomes a **Transit Portal** — calm, safe, and welcoming — connecting the Central District to the new light rail era.
-
-Two RRFBs. Two roundabouts. One redesigned gateway.
+Two RRFBs. Two roundabouts. One neighborhood ready for a walkable, transit-oriented future.
