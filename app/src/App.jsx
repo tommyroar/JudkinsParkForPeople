@@ -316,7 +316,7 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
-  const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.5 : 0
+  const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
 
