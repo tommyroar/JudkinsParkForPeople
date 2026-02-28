@@ -22,14 +22,6 @@ mapStates:
     zoom: 16.5
     pitch: 50
     bearing: 20
-  - longitude: -122.3007
-    latitude: 47.5933
-    zoom: 17
-    pitch: 55
-    bearing: 80
-marker:
-  longitude: -122.306348
-  latitude: 47.597486
 ---
 
 North of Jackson, 20th Ave S has numerous stop signs, stop lights and roundabouts. South of Jackson — all the way to Judkins Street — there are **zero stop signs**. Nothing to slow cut-through traffic, including heavy trucks, from moving at speed through a residential neighborhood with hundreds of students walking to school.
