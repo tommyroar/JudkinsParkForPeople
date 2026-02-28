@@ -355,7 +355,7 @@ export default function App() {
                 type="circle"
                 filter={['all', ['==', ['get', 'FATALITIES'], 0], ['any', ['>', ['get', 'PEDCOUNT'], 0], ['>', ['get', 'SERIOUSINJURIES'], 0]]]}
                 paint={{
-                  'circle-radius': 5,
+                  'circle-radius': 8,
                   'circle-color': [
                     'case',
                     ['>', ['get', 'PEDCOUNT'], 0], '#eab308',
