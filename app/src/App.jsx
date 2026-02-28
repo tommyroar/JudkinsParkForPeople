@@ -318,6 +318,8 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
+  const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.5 : 0
+  const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
 
   return (
@@ -332,7 +334,7 @@ export default function App() {
           style={{ width: '100%', height: '100%' }}
           onLoad={handleMapLoad}
         >
-          {showCollisionPoints && collisionGeoJSON && (
+          {collisionPointsVisible && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
               {/* All non-fatal collisions: circles */}
               <Layer
@@ -347,10 +349,10 @@ export default function App() {
                     ['>', ['get', 'SERIOUSINJURIES'], 0], '#ea580c',
                     '#3b82f6',
                   ],
-                  'circle-opacity': 0.8,
+                  'circle-opacity': 0.8 * collisionOpacity,
                   'circle-stroke-width': 1,
                   'circle-stroke-color': '#ffffff',
-                  'circle-stroke-opacity': 0.6,
+                  'circle-stroke-opacity': 0.6 * collisionOpacity,
                 }}
               />
               {/* Pedestrian fatalities: custom icon, rendered on top */}
@@ -363,6 +365,9 @@ export default function App() {
                   'icon-size': 1,
                   'icon-allow-overlap': true,
                   'icon-anchor': 'center',
+                }}
+                paint={{
+                  'icon-opacity': collisionOpacity,
                 }}
               />
             </Source>
