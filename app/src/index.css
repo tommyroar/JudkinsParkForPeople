@@ -9,6 +9,11 @@
   height: 100%;
 }
 
+/* Paragraph spacing inside chapter cards */
+.prose p + p {
+  margin-top: 0.75rem;
+}
+
 /* Images embedded in chapter Markdown (optional — cards without images are unaffected) */
 .prose img {
   width: 100%;

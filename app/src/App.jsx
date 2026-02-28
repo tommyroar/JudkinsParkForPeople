@@ -55,7 +55,7 @@ async function fetchCollisionPoints() {
 }
 
 const LEGEND = [
-  { label: 'HAWK Signal', color: '#16a34a', icon: AlertTriangle },
+  { label: 'RRFB', color: '#16a34a', icon: AlertTriangle },
   { label: 'Roundabout', color: '#1e3a8a', icon: RotateCcw },
   { label: 'Light Rail', color: '#7c3aed', icon: Train },
 ]
@@ -158,7 +158,7 @@ function CollisionLegend() {
     { label: 'Pedestrian fatality', isSkull: true },
     { label: 'Pedestrian crash', color: '#eab308' },
     { label: 'Serious injury', color: '#ea580c' },
-    { label: 'Other injury', color: '#3b82f6' },
+    { label: 'All traffic injuries', color: '#3b82f6' },
   ]
   return (
     <div className="fixed bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
@@ -264,14 +264,35 @@ export default function App() {
       setShowReturnButton(false)
     }
     if (mapRef.current) {
-      mapRef.current.flyTo({
-        center: [chapter.mapState.longitude, chapter.mapState.latitude],
-        zoom: chapter.mapState.zoom,
-        pitch: chapter.mapState.pitch,
-        bearing: chapter.mapState.bearing,
-        duration: 1800,
-        essential: true,
-      })
+      const states = chapter.mapStates
+      if (states?.length >= 2) {
+        // First leg: quick transition in (800ms); subsequent legs: scenic flight (3000ms each)
+        const flyNext = (idx) => {
+          if (idx >= states.length) return
+          const s = states[idx]
+          mapRef.current?.flyTo({
+            center: [s.longitude, s.latitude],
+            zoom: s.zoom,
+            pitch: s.pitch,
+            bearing: s.bearing,
+            duration: idx === 0 ? 800 : 3000,
+            essential: true,
+          })
+          if (idx < states.length - 1) {
+            mapRef.current?.getMap().once('moveend', () => flyNext(idx + 1))
+          }
+        }
+        flyNext(0)
+      } else {
+        mapRef.current.flyTo({
+          center: [chapter.mapState.longitude, chapter.mapState.latitude],
+          zoom: chapter.mapState.zoom,
+          pitch: chapter.mapState.pitch,
+          bearing: chapter.mapState.bearing,
+          duration: 1800,
+          essential: true,
+        })
+      }
     }
   }, [])
 
@@ -296,6 +317,8 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
+  const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
+  const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
 
   return (
@@ -310,25 +333,38 @@ export default function App() {
           style={{ width: '100%', height: '100%' }}
           onLoad={handleMapLoad}
         >
-          {showCollisionPoints && collisionGeoJSON && (
+          {collisionPointsVisible && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
-              {/* All non-fatal collisions: circles */}
+              {/* Other (non-ped, non-serious) injuries: rendered beneath */}
+              <Layer
+                id="collision-circles-other"
+                type="circle"
+                filter={['all', ['==', ['get', 'FATALITIES'], 0], ['==', ['get', 'PEDCOUNT'], 0], ['==', ['get', 'SERIOUSINJURIES'], 0]]}
+                paint={{
+                  'circle-radius': 5,
+                  'circle-color': '#3b82f6',
+                  'circle-opacity': collisionPointsVisible ? 0.5 : 0,
+                  'circle-stroke-width': 1,
+                  'circle-stroke-color': '#ffffff',
+                  'circle-stroke-opacity': collisionPointsVisible ? 0.4 : 0,
+                }}
+              />
+              {/* Pedestrian + serious injury collisions: circles */}
               <Layer
                 id="collision-circles"
                 type="circle"
-                filter={['==', ['get', 'FATALITIES'], 0]}
+                filter={['all', ['==', ['get', 'FATALITIES'], 0], ['any', ['>', ['get', 'PEDCOUNT'], 0], ['>', ['get', 'SERIOUSINJURIES'], 0]]]}
                 paint={{
-                  'circle-radius': 5,
+                  'circle-radius': 8,
                   'circle-color': [
                     'case',
                     ['>', ['get', 'PEDCOUNT'], 0], '#eab308',
-                    ['>', ['get', 'SERIOUSINJURIES'], 0], '#ea580c',
-                    '#3b82f6',
+                    '#ea580c',
                   ],
-                  'circle-opacity': 0.8,
+                  'circle-opacity': 0.8 * collisionOpacity,
                   'circle-stroke-width': 1,
                   'circle-stroke-color': '#ffffff',
-                  'circle-stroke-opacity': 0.6,
+                  'circle-stroke-opacity': 0.6 * collisionOpacity,
                 }}
               />
               {/* Pedestrian fatalities: custom icon, rendered on top */}
@@ -341,6 +377,9 @@ export default function App() {
                   'icon-size': 1,
                   'icon-allow-overlap': true,
                   'icon-anchor': 'center',
+                }}
+                paint={{
+                  'icon-opacity': collisionOpacity,
                 }}
               />
             </Source>
