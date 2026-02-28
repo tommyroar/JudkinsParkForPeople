@@ -334,49 +334,12 @@ export default function App() {
           onLoad={handleMapLoad}
         >
           {collisionPointsVisible && collisionGeoJSON && (
-            <Source
-              id="collisions"
-              type="geojson"
-              data={collisionGeoJSON}
-              cluster={true}
-              clusterMaxZoom={15}
-              clusterRadius={40}
-            >
-              {/* Cluster bubbles */}
-              <Layer
-                id="collision-clusters"
-                type="circle"
-                filter={['has', 'point_count']}
-                paint={{
-                  'circle-radius': ['step', ['get', 'point_count'], 14, 10, 20, 30, 26],
-                  'circle-color': '#64748b',
-                  'circle-opacity': 0.75 * collisionOpacity,
-                  'circle-stroke-width': 2,
-                  'circle-stroke-color': '#ffffff',
-                  'circle-stroke-opacity': 0.6 * collisionOpacity,
-                }}
-              />
-              {/* Cluster count labels */}
-              <Layer
-                id="collision-cluster-count"
-                type="symbol"
-                filter={['has', 'point_count']}
-                layout={{
-                  'text-field': '{point_count_abbreviated}',
-                  'text-size': 11,
-                  'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                  'text-allow-overlap': true,
-                }}
-                paint={{
-                  'text-color': '#ffffff',
-                  'text-opacity': collisionOpacity,
-                }}
-              />
+            <Source id="collisions" type="geojson" data={collisionGeoJSON}>
               {/* Other (non-ped, non-serious) injuries: rendered beneath */}
               <Layer
                 id="collision-circles-other"
                 type="circle"
-                filter={['all', ['!', ['has', 'point_count']], ['==', ['get', 'FATALITIES'], 0], ['==', ['get', 'PEDCOUNT'], 0], ['==', ['get', 'SERIOUSINJURIES'], 0]]}
+                filter={['all', ['==', ['get', 'FATALITIES'], 0], ['==', ['get', 'PEDCOUNT'], 0], ['==', ['get', 'SERIOUSINJURIES'], 0]]}
                 paint={{
                   'circle-radius': 5,
                   'circle-color': '#3b82f6',
@@ -390,7 +353,7 @@ export default function App() {
               <Layer
                 id="collision-circles"
                 type="circle"
-                filter={['all', ['!', ['has', 'point_count']], ['==', ['get', 'FATALITIES'], 0], ['any', ['>', ['get', 'PEDCOUNT'], 0], ['>', ['get', 'SERIOUSINJURIES'], 0]]]}
+                filter={['all', ['==', ['get', 'FATALITIES'], 0], ['any', ['>', ['get', 'PEDCOUNT'], 0], ['>', ['get', 'SERIOUSINJURIES'], 0]]]}
                 paint={{
                   'circle-radius': 5,
                   'circle-color': [
@@ -408,7 +371,7 @@ export default function App() {
               <Layer
                 id="collision-ped-fatality"
                 type="symbol"
-                filter={['all', ['!', ['has', 'point_count']], ['>', ['get', 'FATALITIES'], 0], ['>', ['get', 'PEDCOUNT'], 0]]}
+                filter={['all', ['>', ['get', 'FATALITIES'], 0], ['>', ['get', 'PEDCOUNT'], 0]]}
                 layout={{
                   'icon-image': 'ped-fatality',
                   'icon-size': 1,
