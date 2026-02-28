@@ -8,7 +8,7 @@ color: '#1e3a8a'
 mapState:
   longitude: -122.3039
   latitude: 47.5944
-  zoom: 13
+  zoom: 15
   pitch: 30
   bearing: 0
 ---
