@@ -201,7 +201,7 @@ function ReturnToStartButton({ visible, onReturn }) {
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           onClick={onReturn}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl font-semibold text-sm text-white tracking-wide"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl font-semibold text-sm text-white tracking-wide"
           style={{ backgroundColor: '#1e3a8a' }}
           aria-label="Return to start"
         >
