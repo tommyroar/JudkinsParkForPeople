@@ -6,7 +6,7 @@
 
 Two deployment workflows exist:
 
-1. **Staging Preview** (`deploy-staging.yaml`): Auto-deploys on any Pull Request targeting `main`. After deploy, posts a PR comment with the staging URL. Verify at `https://tommyroar.github.io/JudkinsParkForPeople/staging/`.
+1. **Staging Preview** (`deploy-staging.yaml`): Auto-deploys on any Pull Request targeting `main`. After deploy, posts a PR comment with the staging URL. Verify at `https://judkinsparkforpeople.org/staging/`.
 2. **Production** (`deploy-spa.yaml`): Auto-deploys on merge to `main`. Verify at `https://tommyroar.github.io/JudkinsParkForPeople/`.
 
 ## Project Structure
