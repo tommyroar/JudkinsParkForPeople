@@ -391,7 +391,7 @@ export default function App() {
       <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
 
       {/* Scrollytelling story track */}
-      <div className="relative z-10">
+      <div className="relative z-30">
         <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
