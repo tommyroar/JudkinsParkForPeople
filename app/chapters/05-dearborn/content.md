@@ -15,13 +15,13 @@ marker:
   longitude: -122.3061
   latitude: 47.5959
 photos:
-  - src: /chapters/dearborn/aerial.jpg
+  - src: aerial.jpg
     alt: Aerial view of 20th Ave S at S Dearborn St
-  - src: /chapters/dearborn/IMG_3055.jpg
+  - src: IMG_3055.jpg
     alt: 20th Ave S at S Dearborn St
-  - src: /chapters/dearborn/IMG_3056.jpg
+  - src: IMG_3056.jpg
     alt: Looking south along 20th Ave S
-  - src: /chapters/dearborn/IMG_3057.jpg
+  - src: IMG_3057.jpg
     alt: Street conditions near S Dearborn St
 ---
 
