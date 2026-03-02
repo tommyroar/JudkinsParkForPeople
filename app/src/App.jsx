@@ -108,8 +108,6 @@ function PhotoSlider({ photos }) {
   const dragging = useRef(false)
   const pairCount = photos.length - 1
 
-  const base = import.meta.env.BASE_URL
-  const resolveUrl = (src) => base + src.replace(/^\//, '')
   const front = photos[pairIdx]
   const back = photos[pairIdx + 1]
 
@@ -147,9 +145,9 @@ function PhotoSlider({ photos }) {
         onTouchEnd={() => { dragging.current = false }}
       >
         {/* Back image — fills full frame (right side visible) */}
-        <img src={resolveUrl(back.src)} alt={back.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} />
+        <img src={back.src} alt={back.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} />
         {/* Front image — clipped to left of handle */}
-        <img src={resolveUrl(front.src)} alt={front.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
+        <img src={front.src} alt={front.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
         {/* Divider + handle */}
         <div className="absolute top-0 bottom-0 w-px bg-white/90 shadow-[0_0_6px_rgba(0,0,0,0.5)] pointer-events-none z-10" style={{ left: `${pos}%` }}>
           <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 bg-white rounded-full shadow-xl flex items-center justify-center">

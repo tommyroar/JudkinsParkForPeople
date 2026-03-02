@@ -52,7 +52,7 @@ When performing development or deployment tasks:
 
 1. **Branch isolation**: Develop on a descriptive feature branch. Never commit directly to `main`.
 2. **Verify domain coexistence**: All workflow changes must preserve `keep_files: true` to prevent the production root and `staging/` directory from overwriting each other on `gh-pages`.
-3. **Never merge your own PRs**: Open a PR targeting `main` and wait for a human maintainer to merge.
+3. **Merging PRs**: Do not merge PRs unless explicitly instructed by the user (e.g. "merge the PR"). When instructed, use `gh pr merge --merge`.
 4. **Run tests before opening PRs**: `cd app && npm test && npm run lint`
 
 ## Issue Lifecycle
@@ -69,7 +69,7 @@ When performing development or deployment tasks:
 ### Phase 3: Pull Request & Staging
 1. Open a PR to `main`, using `Fixes #N` or `Closes #N` in the PR body.
 2. `deploy-staging.yaml` triggers automatically and posts the staging URL.
-3. Respond to review feedback with new commits. Do NOT merge.
+3. Respond to review feedback with new commits. Only merge when explicitly instructed.
 
 ### Phase 4: Deployment & Closure
 1. After the human merges to `main`, `deploy-spa.yaml` triggers automatically.
