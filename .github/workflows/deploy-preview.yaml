@@ -1,0 +1,118 @@
+name: Deploy Branch Preview
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - gh-pages
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  deployments: write
+
+concurrency:
+  group: "preview-${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Compute slug
+        id: slug
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            branch="${{ github.head_ref }}"
+          else
+            branch="${{ github.ref_name }}"
+          fi
+          slug=$(echo "$branch" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's|[^a-z0-9]|-|g' \
+            | sed 's|-\+|-|g' \
+            | sed 's|^-||;s|-$||' \
+            | cut -c1-50)
+          echo "slug=$slug" >> $GITHUB_OUTPUT
+          echo "url=https://judkinsparkforpeople.org/preview/$slug/" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: app
+
+      - name: Build SPA (preview)
+        run: npm run build -- --base=/preview/${{ steps.slug.outputs.slug }}/ --outDir ../dist-preview/
+        working-directory: app
+        env:
+          VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+
+      - name: Deploy to GitHub Pages (preview)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist-preview
+          destination_dir: preview/${{ steps.slug.outputs.slug }}
+          publish_branch: gh-pages
+          keep_files: true
+
+      - name: Get PR number
+        id: pr
+        uses: actions/github-script@v8
+        with:
+          result-encoding: string
+          script: |
+            if (context.eventName === 'pull_request') {
+              return String(context.issue.number)
+            }
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${context.ref.replace('refs/heads/', '')}`,
+              state: 'open',
+            })
+            return prs.data.length > 0 ? String(prs.data[0].number) : ''
+
+      - name: Post or update preview comment on PR
+        if: steps.pr.outputs.result != ''
+        uses: actions/github-script@v8
+        env:
+          PREVIEW_URL: ${{ steps.slug.outputs.url }}
+        with:
+          script: |
+            const prNumber = parseInt('${{ steps.pr.outputs.result }}')
+            const url = process.env.PREVIEW_URL
+            const marker = '<!-- branch-preview-bot -->'
+            const body = `${marker}\n**Branch preview deployed:** ${url}`
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            })
+
+            const existing = comments.data.find(c => c.body.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              })
+            }
