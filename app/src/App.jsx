@@ -88,7 +88,7 @@ function IntroCard({ chapter }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-white/60 max-w-md w-full"
+      className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 md:p-8 border border-white/60 max-w-md w-full max-h-[52vh] overflow-y-auto md:max-h-none md:overflow-visible"
     >
       <h1 className="text-3xl font-bold mb-4" style={{ color: '#1e3a8a' }}>
         {chapter.title}
@@ -187,7 +187,7 @@ function ChapterCard({ chapter, progress = 1 }) {
       exit={{ opacity: 0, x: -24 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       style={{ backgroundColor: `rgba(255,255,255,${bgOpacity})` }}
-      className="backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/60 max-w-sm w-full"
+      className="backdrop-blur-md rounded-2xl shadow-xl p-4 md:p-6 border border-white/60 max-w-sm w-full max-h-[52vh] overflow-y-auto md:max-h-none md:overflow-visible"
     >
       {!chapter.showCollisionPoints && (
         <>
@@ -511,7 +511,7 @@ export default function App() {
         <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
-              <section className="min-h-screen flex items-center py-16 px-6 md:px-12">
+              <section className="min-h-screen flex items-end md:items-center pb-6 md:py-16 px-6 md:px-12">
                 <AnimatePresence>
                   {activeChapter.id === chapter.id &&
                     (chapter.type === 'intro' ? (
