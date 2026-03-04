@@ -88,12 +88,12 @@ function IntroCard({ chapter }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-4 md:p-8 border border-white/60 max-w-md w-full"
+      className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-white/60 max-w-md w-full"
     >
-      <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4" style={{ color: '#1e3a8a' }}>
+      <h1 className="text-3xl font-bold mb-4" style={{ color: '#1e3a8a' }}>
         {chapter.title}
       </h1>
-      <div className="text-gray-700 text-sm leading-snug md:leading-relaxed prose max-w-none">
+      <div className="text-gray-700 leading-relaxed prose max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
       <p className="mt-5 text-xs text-gray-400 font-medium tracking-wide">Scroll to explore the proposal ↓</p>
@@ -187,24 +187,23 @@ function ChapterCard({ chapter, progress = 1 }) {
       exit={{ opacity: 0, x: -24 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       style={{ backgroundColor: `rgba(255,255,255,${bgOpacity})` }}
-      className="backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-6 border border-white/60 max-w-sm w-full"
+      className="backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/60 max-w-sm w-full"
     >
       {!chapter.showCollisionPoints && (
         <>
           <div
-            className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full mb-2 md:mb-3 shadow-sm"
+            className="flex items-center justify-center w-10 h-10 rounded-full mb-3 shadow-sm"
             style={{ backgroundColor: chapter.color }}
           >
-            <Icon size={16} color="white" strokeWidth={2} className="md:hidden" />
-            <Icon size={20} color="white" strokeWidth={2} className="hidden md:block" />
+            <Icon size={20} color="white" strokeWidth={2} />
           </div>
           <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: chapter.color }}>
             {chapter.subtitle}
           </p>
         </>
       )}
-      <h2 className="text-base md:text-xl font-bold text-gray-900 mb-1 md:mb-3">{chapter.title}</h2>
-      <div className="text-gray-700 text-xs md:text-sm leading-snug md:leading-relaxed prose prose-sm max-w-none">
+      <h2 className="text-xl font-bold text-gray-900 mb-3">{chapter.title}</h2>
+      <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
       {chapter.photos?.length > 0 && <PhotoSlider photos={chapter.photos} />}
@@ -214,7 +213,7 @@ function ChapterCard({ chapter, progress = 1 }) {
 
 function Legend() {
   return (
-    <div className="fixed bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
+    <div className="fixed bottom-[calc(50vh+0.75rem)] md:bottom-6 right-3 md:right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
       <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Proposals</p>
       {LEGEND.map(({ label, color, icon: Icon }) => (
         <div key={label} className="flex items-center gap-2 mb-1 last:mb-0">
@@ -239,7 +238,7 @@ function CollisionLegend() {
     { label: 'All traffic injuries', color: '#3b82f6' },
   ]
   return (
-    <div className="fixed bottom-6 right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
+    <div className="fixed bottom-[calc(50vh+0.75rem)] md:bottom-6 right-3 md:right-6 z-20 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-3 border border-white/60">
       <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Collisions 2015–2025</p>
       {ITEMS.map(({ label, isSkull, color }) => (
         <div key={label} className="flex items-center gap-2 mb-1 last:mb-0">
@@ -279,7 +278,7 @@ function ReturnToStartButton({ visible, onReturn }) {
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           onClick={onReturn}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl font-semibold text-sm text-white tracking-wide"
+          className="fixed bottom-[calc(50vh+1rem)] md:bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl font-semibold text-sm text-white tracking-wide"
           style={{ backgroundColor: '#1e3a8a' }}
           aria-label="Return to start"
         >
@@ -393,6 +392,7 @@ export default function App() {
 
   const activeChapter = CHAPTERS.find(c => c.id === activeChapterId) ?? CHAPTERS[0]
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
+  const ActiveIcon = activeChapter.icon
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
@@ -512,20 +512,72 @@ export default function App() {
         <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
-              <section className="min-h-screen flex items-end md:items-center pb-4 md:py-16 px-3 md:px-12">
-                <AnimatePresence>
-                  {activeChapter.id === chapter.id &&
-                    (chapter.type === 'intro' ? (
-                      <IntroCard key={chapter.id} chapter={chapter} />
-                    ) : (
-                      <ChapterCard key={chapter.id} chapter={chapter} progress={chapter.id === 'data' ? dataProgress : 1} />
-                    ))}
-                </AnimatePresence>
+              {/* Section provides scroll height on all breakpoints. Cards shown inline on desktop only. */}
+              <section className="min-h-screen">
+                <div className="hidden md:flex items-center min-h-screen py-16 px-12">
+                  <AnimatePresence>
+                    {activeChapter.id === chapter.id &&
+                      (chapter.type === 'intro' ? (
+                        <IntroCard key={chapter.id} chapter={chapter} />
+                      ) : (
+                        <ChapterCard key={chapter.id} chapter={chapter} progress={chapter.id === 'data' ? dataProgress : 1} />
+                      ))}
+                  </AnimatePresence>
+                </div>
               </section>
             </Step>
           ))}
         </Scrollama>
         <div className="min-h-screen" />
+      </div>
+
+      {/* Mobile: fixed bottom-half panel — slides in from below on chapter change */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 h-[50vh] z-30 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeChapterId}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
+            style={{ backgroundColor: showCollisionPoints ? `rgba(255,255,255,${Math.max(0.15, dataProgress * 0.65)})` : 'rgba(255,255,255,0.92)' }}
+            className="absolute inset-0 backdrop-blur-md rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.12)] overflow-y-auto"
+          >
+            {/* Drag-handle pill */}
+            <div className="sticky top-0 flex justify-center pt-2.5 pb-1" style={{ background: 'inherit' }}>
+              <div className="w-8 h-1 bg-gray-300 rounded-full" />
+            </div>
+            <div className="px-4 pb-6">
+              {activeChapter.type === 'intro' ? (
+                <>
+                  <h1 className="text-2xl font-bold mb-2" style={{ color: '#1e3a8a' }}>{activeChapter.title}</h1>
+                  <div className="text-gray-700 text-sm leading-snug prose max-w-none">
+                    <ReactMarkdown components={MD_COMPONENTS}>{activeChapter.content}</ReactMarkdown>
+                  </div>
+                  <p className="mt-3 text-xs text-gray-400 font-medium tracking-wide">Scroll to explore ↓</p>
+                </>
+              ) : (
+                <>
+                  {!activeChapter.showCollisionPoints && (
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div className="flex items-center justify-center w-7 h-7 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: activeChapter.color }}>
+                        <ActiveIcon size={13} color="white" strokeWidth={2} />
+                      </div>
+                      <p className="text-xs font-semibold uppercase tracking-widest leading-tight" style={{ color: activeChapter.color }}>
+                        {activeChapter.subtitle}
+                      </p>
+                    </div>
+                  )}
+                  <h2 className="text-base font-bold text-gray-900 mb-1.5">{activeChapter.title}</h2>
+                  <div className="text-gray-700 text-xs leading-snug prose prose-sm max-w-none">
+                    <ReactMarkdown components={MD_COMPONENTS}>{activeChapter.content}</ReactMarkdown>
+                  </div>
+                  {activeChapter.photos?.length > 0 && <PhotoSlider photos={activeChapter.photos} />}
+                </>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   )

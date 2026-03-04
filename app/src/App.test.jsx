@@ -9,11 +9,11 @@ describe('App', () => {
 
   it('shows the intro title', () => {
     render(<App />)
-    expect(screen.getByText('Judkins Park For People')).toBeInTheDocument()
+    expect(screen.getAllByText('Judkins Park For People').length).toBeGreaterThan(0)
   })
 
   it('shows the opening date in the intro', () => {
     render(<App />)
-    expect(screen.getByText(/March 28, 2026/)).toBeInTheDocument()
+    expect(screen.getAllByText(/March 28, 2026/).length).toBeGreaterThan(0)
   })
 })
