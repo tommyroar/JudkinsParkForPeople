@@ -3,7 +3,7 @@ import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
 
@@ -75,6 +75,7 @@ const CORRIDOR_GEOJSON = {
     ],
   },
 }
+
 
 // Fetches all injury and fatality collision points (2015–present) within the 1-mile corridor bbox
 async function fetchCollisionPoints() {
@@ -231,9 +232,9 @@ function PhotoSlider({ photos }) {
   )
 }
 
-function ChapterCard({ chapter, progress = 1 }) {
+function ChapterCard({ chapter }) {
   const Icon = chapter.icon
-  const bgOpacity = chapter.showCollisionPoints ? progress * 0.65 : 0.85
+  const bgOpacity = 0.85
   return (
     <motion.div
       initial={{ opacity: 0, x: -24 }}
@@ -352,7 +353,6 @@ export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const [showReturnButton, setShowReturnButton] = useState(false)
   const [collisionGeoJSON, setCollisionGeoJSON] = useState(null)
-  const [dataProgress, setDataProgress] = useState(0)
   const mapRef = useRef(null)
   const isReturningRef = useRef(false)
   const tracerAnimRef = useRef(null)
@@ -399,9 +399,6 @@ export default function App() {
     }
   }, [activeChapterId])
 
-  const handleStepProgress = useCallback(({ data, progress }) => {
-    if (data === 'data') setDataProgress(progress)
-  }, [])
 
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
@@ -488,6 +485,11 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
+  const closureGeoJSON = activeChapter?.closureGeoJSON ?? null
+  const closureMarkers = closureGeoJSON?.features.filter(f => f.geometry.type === 'Point') ?? []
+  const closurePolygon = closureGeoJSON
+    ? { ...closureGeoJSON, features: closureGeoJSON.features.filter(f => f.geometry.type === 'Polygon') }
+    : null
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
@@ -502,6 +504,7 @@ export default function App() {
           initialViewState={CHAPTERS[0].mapState}
           mapStyle="mapbox://styles/mapbox/streets-v12"
           style={{ width: '100%', height: '100%' }}
+          scrollZoom={false}
           onLoad={handleMapLoad}
         >
           {collisionPointsVisible && collisionGeoJSON && (
@@ -635,6 +638,44 @@ export default function App() {
             </Source>
           )}
 
+          {closurePolygon && (
+            <Source id="park-closure" type="geojson" data={closurePolygon}>
+              <Layer
+                id="park-closure-fill"
+                type="fill"
+                paint={{
+                  'fill-color': '#16a34a',
+                  'fill-opacity': 0.5,
+                }}
+              />
+              <Layer
+                id="park-closure-outline"
+                type="line"
+                paint={{
+                  'line-color': '#166534',
+                  'line-width': 5,
+                  'line-opacity': 1,
+                }}
+              />
+            </Source>
+          )}
+
+          {closureMarkers.map(({ geometry, properties }) => (
+            <Marker key={properties.label} longitude={geometry.coordinates[0]} latitude={geometry.coordinates[1]} anchor="center">
+              <div className="flex flex-col items-center gap-1">
+                <div
+                  className="flex items-center justify-center w-9 h-9 rounded-full shadow-lg"
+                  style={{ backgroundColor: '#dc2626' }}
+                >
+                  <Ban size={17} color="white" strokeWidth={2.5} />
+                </div>
+                <div className="bg-white/90 text-gray-800 text-[9px] font-medium px-1.5 py-0.5 rounded shadow leading-none">
+                  {properties.label}
+                </div>
+              </div>
+            </Marker>
+          ))}
+
           {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
             const Icon = chapter.icon
             const isActive = activeChapterId === chapter.id
@@ -665,9 +706,15 @@ export default function App() {
       {showCollisionPoints && <CollisionLegend />}
       <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
 
+      {/* Zoom controls */}
+      <div className="fixed top-3 right-3 z-40 flex flex-col rounded-lg overflow-hidden shadow-lg border border-gray-200">
+        <button onClick={() => mapRef.current?.zoomIn()} className="w-8 h-8 bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 text-lg font-light leading-none border-b border-gray-200">+</button>
+        <button onClick={() => mapRef.current?.zoomOut()} className="w-8 h-8 bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 text-lg font-light leading-none">−</button>
+      </div>
+
       {/* Scrollytelling story track */}
       <div className="relative z-30">
-        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
+        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
               <section className="min-h-screen flex items-end md:items-center pb-4 md:py-16 px-3 md:px-12">
@@ -676,7 +723,7 @@ export default function App() {
                     (chapter.type === 'intro' ? (
                       <IntroCard key={chapter.id} chapter={chapter} />
                     ) : (
-                      <ChapterCard key={chapter.id} chapter={chapter} progress={chapter.id === 'data' ? dataProgress : 1} />
+                      <ChapterCard key={chapter.id} chapter={chapter} />
                     ))}
                 </AnimatePresence>
               </section>

@@ -25,6 +25,6 @@ photos:
     alt: Mexican Tope
 ---
 
-20th & Dearborn is a high-speed cut-through for I-90 and Rainier Blvd traffic. This residential block carries thousands of vehicles daily, threatening families walking to Judkins Park and Garfield High School, and soon to include transit riders crossing 20th Ave S to the station. This is the site of numerous high speed collisions between unimpeded traffic on 20th Ave S and cars coming uphill on Dearborn. This despite the fact that all crossing streets here are "local only". Something needs to be done to cause cars to slow down and watch for pedestrians, instead of viewing them as barriers to traffic.
+20th Ave S & Dearborn is a high-speed cut-through for I-90 and Rainier Blvd traffic, despite being marked "local traffic only". This residential block carries thousands of vehicles daily, threatening families walking to Judkins Park and local schools, and soon to include transit riders crossing 20th Ave S to the station. This is the site of numerous high speed collisions between unimpeded traffic on 20th Ave S and cars coming uphill on Dearborn.
 
-Proposal: A **mini-roundabout** to slow speeds, with free curb space for planted buffers, or extend the current 2-way stop (for crossing traffic) to a full 4-way stop.
+At a minimum, add two more stop signs to prevent cars from getting up to highway speeds going up or downhill on 20th Ave S. Below are more modern traffic calming proposals, overlayed on aerial imagery of the intersection.
