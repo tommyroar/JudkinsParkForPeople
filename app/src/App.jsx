@@ -655,6 +655,7 @@ export default function App() {
                   'line-color': '#dc2626',
                   'line-width': 3,
                   'line-opacity': 1,
+                  'line-dasharray': [2, 2],
                 }}
               />
             </Source>
