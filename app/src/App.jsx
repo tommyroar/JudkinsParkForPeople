@@ -485,12 +485,13 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
-  const parkClosure = activeChapter?.parkClosure ?? null
-  const parkClosureGeoJSON = parkClosure ? {
+  const closureRect = activeChapter?.closureRect ?? null
+  const closureMarkers = activeChapter?.closureMarkers ?? null
+  const parkClosureGeoJSON = closureRect ? {
     type: 'Feature',
     geometry: {
       type: 'Polygon',
-      coordinates: [[...parkClosure.rectangle, parkClosure.rectangle[0]]],
+      coordinates: [[...closureRect, closureRect[0]]],
     },
   } : null
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
@@ -663,7 +664,7 @@ export default function App() {
             </Source>
           )}
 
-          {parkClosure?.markers.map(({ longitude, latitude, label }) => (
+          {closureMarkers?.map(({ longitude, latitude, label }) => (
             <Marker key={label} longitude={longitude} latitude={latitude} anchor="center">
               <div className="flex flex-col items-center gap-1">
                 <div
