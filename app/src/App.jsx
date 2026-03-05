@@ -231,9 +231,9 @@ function PhotoSlider({ photos }) {
   )
 }
 
-function ChapterCard({ chapter, progress = 1 }) {
+function ChapterCard({ chapter }) {
   const Icon = chapter.icon
-  const bgOpacity = chapter.showCollisionPoints ? progress * 0.65 : 0.85
+  const bgOpacity = 0.85
   return (
     <motion.div
       initial={{ opacity: 0, x: -24 }}
@@ -352,7 +352,6 @@ export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const [showReturnButton, setShowReturnButton] = useState(false)
   const [collisionGeoJSON, setCollisionGeoJSON] = useState(null)
-  const [dataProgress, setDataProgress] = useState(0)
   const mapRef = useRef(null)
   const isReturningRef = useRef(false)
   const tracerAnimRef = useRef(null)
@@ -399,9 +398,6 @@ export default function App() {
     }
   }, [activeChapterId])
 
-  const handleStepProgress = useCallback(({ data, progress }) => {
-    if (data === 'data') setDataProgress(progress)
-  }, [])
 
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
@@ -667,7 +663,7 @@ export default function App() {
 
       {/* Scrollytelling story track */}
       <div className="relative z-30">
-        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
+        <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
               <section className="min-h-screen flex items-end md:items-center pb-4 md:py-16 px-3 md:px-12">
@@ -676,7 +672,7 @@ export default function App() {
                     (chapter.type === 'intro' ? (
                       <IntroCard key={chapter.id} chapter={chapter} />
                     ) : (
-                      <ChapterCard key={chapter.id} chapter={chapter} progress={chapter.id === 'data' ? dataProgress : 1} />
+                      <ChapterCard key={chapter.id} chapter={chapter} />
                     ))}
                 </AnimatePresence>
               </section>
