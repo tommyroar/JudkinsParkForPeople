@@ -88,12 +88,12 @@ function IntroCard({ chapter }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-white/60 max-w-md w-full"
+      className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-4 md:p-8 border border-white/60 max-w-md w-full"
     >
-      <h1 className="text-3xl font-bold mb-4" style={{ color: '#1e3a8a' }}>
+      <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4" style={{ color: '#1e3a8a' }}>
         {chapter.title}
       </h1>
-      <div className="text-gray-700 leading-relaxed prose max-w-none">
+      <div className="text-gray-700 text-sm leading-snug md:leading-relaxed prose max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
       <p className="mt-5 text-xs text-gray-400 font-medium tracking-wide">Scroll to explore the proposal ↓</p>
@@ -187,23 +187,24 @@ function ChapterCard({ chapter, progress = 1 }) {
       exit={{ opacity: 0, x: -24 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       style={{ backgroundColor: `rgba(255,255,255,${bgOpacity})` }}
-      className="backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/60 max-w-sm w-full"
+      className="backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-6 border border-white/60 max-w-sm w-full"
     >
       {!chapter.showCollisionPoints && (
         <>
           <div
-            className="flex items-center justify-center w-10 h-10 rounded-full mb-3 shadow-sm"
+            className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full mb-2 md:mb-3 shadow-sm"
             style={{ backgroundColor: chapter.color }}
           >
-            <Icon size={20} color="white" strokeWidth={2} />
+            <Icon size={16} color="white" strokeWidth={2} className="md:hidden" />
+            <Icon size={20} color="white" strokeWidth={2} className="hidden md:block" />
           </div>
           <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: chapter.color }}>
             {chapter.subtitle}
           </p>
         </>
       )}
-      <h2 className="text-xl font-bold text-gray-900 mb-3">{chapter.title}</h2>
-      <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
+      <h2 className="text-base md:text-xl font-bold text-gray-900 mb-1 md:mb-3">{chapter.title}</h2>
+      <div className="text-gray-700 text-xs md:text-sm leading-snug md:leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
       {chapter.photos?.length > 0 && <PhotoSlider photos={chapter.photos} />}
@@ -511,7 +512,7 @@ export default function App() {
         <Scrollama onStepEnter={handleStepEnter} onStepExit={handleStepExit} onStepProgress={handleStepProgress} offset={0.5}>
           {CHAPTERS.map((chapter) => (
             <Step data={chapter.id} key={chapter.id}>
-              <section className="min-h-screen flex items-center py-16 px-6 md:px-12">
+              <section className="min-h-screen flex items-end md:items-center pb-4 md:py-16 px-3 md:px-12">
                 <AnimatePresence>
                   {activeChapter.id === chapter.id &&
                     (chapter.type === 'intro' ? (
