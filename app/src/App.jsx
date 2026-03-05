@@ -8,6 +8,46 @@ import { CHAPTERS } from './chapters.js'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
+// Gateway chapter tracer — 20th Ave S from S Jackson to S Judkins (Tron animation)
+const GATEWAY_ROUTE_COORDS = [
+  [-122.3067, 47.6037], // S Jackson St
+  [-122.3065, 47.6025], // S Waller St
+  [-122.3063, 47.6012], // S Norman St
+  [-122.3060, 47.5995], // S Judkins St
+]
+
+const GATEWAY_ROUTE_GEOJSON = {
+  type: 'Feature',
+  geometry: { type: 'LineString', coordinates: GATEWAY_ROUTE_COORDS },
+}
+
+// Interpolate a point at progress t (0–1) along a coordinate array
+function interpolateAlongLine(coords, t) {
+  if (t <= 0) return coords[0]
+  if (t >= 1) return coords[coords.length - 1]
+  const dists = []
+  let total = 0
+  for (let i = 1; i < coords.length; i++) {
+    const dx = coords[i][0] - coords[i - 1][0]
+    const dy = coords[i][1] - coords[i - 1][1]
+    const d = Math.sqrt(dx * dx + dy * dy)
+    dists.push(d)
+    total += d
+  }
+  let rem = t * total
+  for (let i = 0; i < dists.length; i++) {
+    if (rem <= dists[i]) {
+      const s = rem / dists[i]
+      return [
+        coords[i][0] + s * (coords[i + 1][0] - coords[i][0]),
+        coords[i][1] + s * (coords[i + 1][1] - coords[i][1]),
+      ]
+    }
+    rem -= dists[i]
+  }
+  return coords[coords.length - 1]
+}
+
 // 20th Ave S corridor — S Jackson to S Grand
 const CORRIDOR_GEOJSON = {
   type: 'Feature',
@@ -300,10 +340,49 @@ export default function App() {
   const [dataProgress, setDataProgress] = useState(0)
   const mapRef = useRef(null)
   const isReturningRef = useRef(false)
+  const tracerAnimRef = useRef(null)
 
   useEffect(() => {
     fetchCollisionPoints().then(setCollisionGeoJSON).catch(console.error)
   }, [])
+
+  // Tron tracer animation for the gateway chapter
+  useEffect(() => {
+    if (activeChapterId !== 'gateway') {
+      if (tracerAnimRef.current) {
+        cancelAnimationFrame(tracerAnimRef.current)
+        tracerAnimRef.current = null
+      }
+      return
+    }
+
+    // Each pass: 3500ms travel + 600ms pause before looping
+    const TRAVEL = 3500
+    const PAUSE = 600
+    const CYCLE = TRAVEL + PAUSE
+    const startTime = performance.now()
+
+    const animate = (now) => {
+      const elapsed = (now - startTime) % CYCLE
+      const raw = Math.min(elapsed / TRAVEL, 1)
+      // ease-in-out quad
+      const t = raw < 0.5 ? 2 * raw * raw : -1 + (4 - 2 * raw) * raw
+      const coord = interpolateAlongLine(GATEWAY_ROUTE_COORDS, t)
+
+      const map = mapRef.current?.getMap()
+      const src = map?.getSource('gateway-point')
+      if (src) {
+        src.setData({ type: 'Feature', geometry: { type: 'Point', coordinates: coord } })
+      }
+
+      tracerAnimRef.current = requestAnimationFrame(animate)
+    }
+
+    tracerAnimRef.current = requestAnimationFrame(animate)
+    return () => {
+      if (tracerAnimRef.current) cancelAnimationFrame(tracerAnimRef.current)
+    }
+  }, [activeChapterId])
 
   const handleStepProgress = useCallback(({ data, progress }) => {
     if (data === 'data') setDataProgress(progress)
@@ -460,6 +539,71 @@ export default function App() {
                 }}
               />
             </Source>
+          )}
+
+          {activeChapterId === 'gateway' && (
+            <>
+              {/* Tron glow track — multiple overlapping line layers */}
+              <Source id="gateway-route" type="geojson" data={GATEWAY_ROUTE_GEOJSON}>
+                <Layer
+                  id="gateway-glow-outer"
+                  type="line"
+                  layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  paint={{ 'line-width': 28, 'line-color': '#00e5ff', 'line-opacity': 0.07, 'line-blur': 14 }}
+                />
+                <Layer
+                  id="gateway-glow-mid"
+                  type="line"
+                  layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  paint={{ 'line-width': 12, 'line-color': '#00e5ff', 'line-opacity': 0.2, 'line-blur': 5 }}
+                />
+                <Layer
+                  id="gateway-glow-inner"
+                  type="line"
+                  layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  paint={{ 'line-width': 5, 'line-color': '#00bcd4', 'line-opacity': 0.65 }}
+                />
+                <Layer
+                  id="gateway-core"
+                  type="line"
+                  layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  paint={{ 'line-width': 1.5, 'line-color': '#e0ffff', 'line-opacity': 0.95 }}
+                />
+              </Source>
+              {/* Moving point — halo rings + bright core, updated imperatively each frame */}
+              <Source
+                id="gateway-point"
+                type="geojson"
+                data={{ type: 'Feature', geometry: { type: 'Point', coordinates: GATEWAY_ROUTE_COORDS[0] } }}
+              >
+                <Layer
+                  id="gateway-pt-halo-3"
+                  type="circle"
+                  paint={{ 'circle-radius': 28, 'circle-color': '#00e5ff', 'circle-opacity': 0.07, 'circle-blur': 1 }}
+                />
+                <Layer
+                  id="gateway-pt-halo-2"
+                  type="circle"
+                  paint={{ 'circle-radius': 14, 'circle-color': '#00bcd4', 'circle-opacity': 0.25 }}
+                />
+                <Layer
+                  id="gateway-pt-halo-1"
+                  type="circle"
+                  paint={{ 'circle-radius': 8, 'circle-color': '#00e5ff', 'circle-opacity': 0.55 }}
+                />
+                <Layer
+                  id="gateway-pt-core"
+                  type="circle"
+                  paint={{
+                    'circle-radius': 5,
+                    'circle-color': '#ffffff',
+                    'circle-opacity': 1,
+                    'circle-stroke-width': 2.5,
+                    'circle-stroke-color': '#00e5ff',
+                  }}
+                />
+              </Source>
+            </>
           )}
 
           {showCorridor && (
