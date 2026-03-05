@@ -76,26 +76,6 @@ const CORRIDOR_GEOJSON = {
   },
 }
 
-// Judkins Park closure area for Umoja Fest — rectangle spanning east + west halves of the park
-const PARK_CLOSURE_GEOJSON = {
-  type: 'Feature',
-  geometry: {
-    type: 'Polygon',
-    coordinates: [[
-      [-122.3095, 47.5960], // NW — 20th Ave S & S Dearborn area
-      [-122.2940, 47.5960], // NE — 23rd Ave S north
-      [-122.2940, 47.5840], // SE — 23rd Ave S & S Norman
-      [-122.3095, 47.5840], // SW — 20th Ave S & S Norman
-      [-122.3095, 47.5960], // close ring
-    ]],
-  },
-}
-
-// Road closure entry points for Umoja Fest
-const PARK_CLOSURE_MARKERS = [
-  { id: 'norman-st',  longitude: -122.3010, latitude: 47.5840, label: 'Norman St' },
-  { id: '23rd-ave-s', longitude: -122.2940, latitude: 47.5900, label: '23rd Ave S' },
-]
 
 // Fetches all injury and fatality collision points (2015–present) within the 1-mile corridor bbox
 async function fetchCollisionPoints() {
@@ -505,7 +485,14 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
-  const showParkClosure = activeChapter?.showParkClosure ?? false
+  const parkClosure = activeChapter?.parkClosure ?? null
+  const parkClosureGeoJSON = parkClosure ? {
+    type: 'Feature',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [[...parkClosure.rectangle, parkClosure.rectangle[0]]],
+    },
+  } : null
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
@@ -653,8 +640,8 @@ export default function App() {
             </Source>
           )}
 
-          {showParkClosure && (
-            <Source id="park-closure" type="geojson" data={PARK_CLOSURE_GEOJSON}>
+          {parkClosureGeoJSON && (
+            <Source id="park-closure" type="geojson" data={parkClosureGeoJSON}>
               <Layer
                 id="park-closure-fill"
                 type="fill"
@@ -676,8 +663,8 @@ export default function App() {
             </Source>
           )}
 
-          {showParkClosure && PARK_CLOSURE_MARKERS.map(({ id, longitude, latitude, label }) => (
-            <Marker key={id} longitude={longitude} latitude={latitude} anchor="center">
+          {parkClosure?.markers.map(({ longitude, latitude, label }) => (
+            <Marker key={label} longitude={longitude} latitude={latitude} anchor="center">
               <div className="flex flex-col items-center gap-0.5">
                 <div className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg leading-tight tracking-wide uppercase">
                   CLOSED

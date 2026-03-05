@@ -5,7 +5,19 @@ title: Umoja Fest
 subtitle: 'Annual Event • Judkins Park'
 icon: Trees
 color: '#16a34a'
-showParkClosure: true
+parkClosure:
+  rectangle:
+    - [-122.3095, 47.5960]
+    - [-122.2940, 47.5960]
+    - [-122.2940, 47.5840]
+    - [-122.3095, 47.5840]
+  markers:
+    - longitude: -122.3010
+      latitude: 47.5840
+      label: Norman St
+    - longitude: -122.2940
+      latitude: 47.5900
+      label: 23rd Ave S
 mapState:
   longitude: -122.3010
   latitude: 47.5910
