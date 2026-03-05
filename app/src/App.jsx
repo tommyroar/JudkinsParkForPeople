@@ -9,8 +9,30 @@ import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
+// Chaikin smoothing — subdivides segments iteratively to produce a smooth curve.
+// The GeoJSON stays at its original point count; smoothed coords are used only at runtime.
+function chaikin(coords, iterations = 4) {
+  let pts = coords
+  for (let iter = 0; iter < iterations; iter++) {
+    const out = [pts[0]]
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i], p1 = pts[i + 1]
+      out.push([0.75 * p0[0] + 0.25 * p1[0], 0.75 * p0[1] + 0.25 * p1[1]])
+      out.push([0.25 * p0[0] + 0.75 * p1[0], 0.25 * p0[1] + 0.75 * p1[1]])
+    }
+    out.push(pts[pts.length - 1])
+    pts = out
+  }
+  return pts
+}
+
 // Gateway chapter tracer route — edit app/chapters/03-gateway/tracer-route.geojson to move points
-const GATEWAY_ROUTE_COORDS = GATEWAY_ROUTE_GEOJSON.geometry.coordinates
+const GATEWAY_ROUTE_COORDS = chaikin(GATEWAY_ROUTE_GEOJSON.geometry.coordinates)
+
+const GATEWAY_ROUTE_SMOOTH_GEOJSON = {
+  type: 'Feature',
+  geometry: { type: 'LineString', coordinates: GATEWAY_ROUTE_COORDS },
+}
 
 // Interpolate a point at progress t (0–1) along a coordinate array
 function interpolateAlongLine(coords, t) {
@@ -535,7 +557,7 @@ export default function App() {
           {activeChapterId === 'gateway' && (
             <>
               {/* Tron glow track — multiple overlapping line layers */}
-              <Source id="gateway-route" type="geojson" data={GATEWAY_ROUTE_GEOJSON}>
+              <Source id="gateway-route" type="geojson" data={GATEWAY_ROUTE_SMOOTH_GEOJSON}>
                 <Layer
                   id="gateway-glow-outer"
                   type="line"
