@@ -34,9 +34,17 @@ function parseSimpleYaml(yaml) {
     if (val === '') {
       i++
       if (i < lines.length && /^ {2}-/.test(lines[i])) {
-        // Array of objects — each item starts with '  -'
+        // Array — each item starts with '  -'
         const arr = []
         while (i < lines.length && /^ {2}-/.test(lines[i])) {
+          // Flow sequence item: - [val, val, ...]
+          const flowSeq = lines[i].match(/^ {2}-\s+\[(.+)\]$/)
+          if (flowSeq) {
+            arr.push(flowSeq[1].split(',').map(v => parseValue(v.trim())))
+            i++
+            continue
+          }
+          // Object item: - key: val / indented keys
           const item = {}
           const inline = lines[i].match(/^ {2}-\s+(\w+):\s*(.+)$/)
           if (inline) item[inline[1]] = parseValue(inline[2].trim())
