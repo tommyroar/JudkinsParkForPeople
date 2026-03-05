@@ -3,7 +3,7 @@ import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
 
@@ -665,9 +665,12 @@ export default function App() {
 
           {parkClosure?.markers.map(({ longitude, latitude, label }) => (
             <Marker key={label} longitude={longitude} latitude={latitude} anchor="center">
-              <div className="flex flex-col items-center gap-0.5">
-                <div className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg leading-tight tracking-wide uppercase">
-                  CLOSED
+              <div className="flex flex-col items-center gap-1">
+                <div
+                  className="flex items-center justify-center w-9 h-9 rounded-full shadow-lg"
+                  style={{ backgroundColor: '#dc2626' }}
+                >
+                  <Ban size={17} color="white" strokeWidth={2.5} />
                 </div>
                 <div className="bg-white/90 text-gray-800 text-[9px] font-medium px-1.5 py-0.5 rounded shadow leading-none">
                   {label}
