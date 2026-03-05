@@ -645,17 +645,16 @@ export default function App() {
                 type="fill"
                 paint={{
                   'fill-color': '#16a34a',
-                  'fill-opacity': 0.15,
+                  'fill-opacity': 0.5,
                 }}
               />
               <Layer
                 id="park-closure-outline"
                 type="line"
                 paint={{
-                  'line-color': '#16a34a',
-                  'line-width': 2,
-                  'line-opacity': 0.7,
-                  'line-dasharray': [4, 3],
+                  'line-color': '#dc2626',
+                  'line-width': 3,
+                  'line-opacity': 1,
                 }}
               />
             </Source>
