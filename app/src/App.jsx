@@ -507,7 +507,7 @@ export default function App() {
           scrollZoom={false}
           onLoad={handleMapLoad}
         >
-          <NavigationControl showCompass={false} position="bottom-left" />
+          <NavigationControl showCompass={false} position="top-right" />
           {collisionPointsVisible && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
               {/* Other (non-ped, non-serious) injuries: rendered beneath */}
