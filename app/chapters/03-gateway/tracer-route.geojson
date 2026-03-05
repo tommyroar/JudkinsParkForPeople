@@ -1,0 +1,15 @@
+{
+  "type": "Feature",
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [-122.3067, 47.6037],
+      [-122.3065, 47.6025],
+      [-122.3063, 47.6012],
+      [-122.3060, 47.5995]
+    ]
+  },
+  "properties": {
+    "description": "20th Ave S from S Jackson St to S Judkins St — gateway chapter Tron tracer route"
+  }
+}

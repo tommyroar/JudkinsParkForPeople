@@ -5,21 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronLeft, ChevronRight, ChevronsLeftRight } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
+import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
-// Gateway chapter tracer — 20th Ave S from S Jackson to S Judkins (Tron animation)
-const GATEWAY_ROUTE_COORDS = [
-  [-122.3067, 47.6037], // S Jackson St
-  [-122.3065, 47.6025], // S Waller St
-  [-122.3063, 47.6012], // S Norman St
-  [-122.3060, 47.5995], // S Judkins St
-]
-
-const GATEWAY_ROUTE_GEOJSON = {
-  type: 'Feature',
-  geometry: { type: 'LineString', coordinates: GATEWAY_ROUTE_COORDS },
-}
+// Gateway chapter tracer route — edit app/chapters/03-gateway/tracer-route.geojson to move points
+const GATEWAY_ROUTE_COORDS = GATEWAY_ROUTE_GEOJSON.geometry.coordinates
 
 // Interpolate a point at progress t (0–1) along a coordinate array
 function interpolateAlongLine(coords, t) {

@@ -82,10 +82,19 @@ function markdownPlugin() {
     },
   }
 }
+function geojsonPlugin() {
+  return {
+    name: 'vite-plugin-geojson',
+    transform(code, id) {
+      if (!id.endsWith('.geojson')) return null
+      return { code: `export default ${code}`, map: null }
+    },
+  }
+}
 // ---------------------------------------------------------------------------
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), markdownPlugin()],
+  plugins: [react(), tailwindcss(), markdownPlugin(), geojsonPlugin()],
   server: {
     allowedHosts: ['tommys-mac-mini.tail59a169.ts.net', 'tommys-mac-mini.local'],
   },
