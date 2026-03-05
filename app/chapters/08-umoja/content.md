@@ -14,4 +14,4 @@ mapState:
   bearing: 0
 ---
 
-**Judkins Park** is home to [Umoja Fest](https://umojafestnw.com) every August around Seafair, bringing [up to 10,000 visitors](https://umojafestnw.com/wp-content/uploads/2024/07/SPONSOR-DECK-2024.pdf) to Judkins Park. A majority of this traffic gets to the park from I-90 and Rainier Blvd via the massive 15% incline up to 20th Ave S. With only a 2-way stop for crossing cars, this backs up traffic in all directions for the weekend, forcing cars to make dangerous decisions due to limited visibility and fast moving traffic along 20th Ave S.
+**Judkins Park** is home to [Umoja Fest](https://umojafestnw.com) every August around Seafair, bringing [up to 10,000 visitors](https://umojafestnw.com/wp-content/uploads/2024/07/SPONSOR-DECK-2024.pdf) to Judkins Park. **Recommendation:**: Close the street from Norman St to 23rd Ave, allowing for direct access from the new station to the park without stopping for traffic, and opening up more of the park for vendors and attendees.
