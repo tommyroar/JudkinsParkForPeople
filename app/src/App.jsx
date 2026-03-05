@@ -652,10 +652,9 @@ export default function App() {
                 id="park-closure-outline"
                 type="line"
                 paint={{
-                  'line-color': '#dc2626',
-                  'line-width': 3,
+                  'line-color': '#166534',
+                  'line-width': 5,
                   'line-opacity': 1,
-                  'line-dasharray': [2, 2],
                 }}
               />
             </Source>
