@@ -76,6 +76,27 @@ const CORRIDOR_GEOJSON = {
   },
 }
 
+// Judkins Park closure area for Umoja Fest — rectangle spanning east + west halves of the park
+const PARK_CLOSURE_GEOJSON = {
+  type: 'Feature',
+  geometry: {
+    type: 'Polygon',
+    coordinates: [[
+      [-122.3095, 47.5960], // NW — 20th Ave S & S Dearborn area
+      [-122.2940, 47.5960], // NE — 23rd Ave S north
+      [-122.2940, 47.5840], // SE — 23rd Ave S & S Norman
+      [-122.3095, 47.5840], // SW — 20th Ave S & S Norman
+      [-122.3095, 47.5960], // close ring
+    ]],
+  },
+}
+
+// Road closure entry points for Umoja Fest
+const PARK_CLOSURE_MARKERS = [
+  { id: 'norman-st',  longitude: -122.3010, latitude: 47.5840, label: 'Norman St' },
+  { id: '23rd-ave-s', longitude: -122.2940, latitude: 47.5900, label: '23rd Ave S' },
+]
+
 // Fetches all injury and fatality collision points (2015–present) within the 1-mile corridor bbox
 async function fetchCollisionPoints() {
   const base = 'https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SDOT_Collisions_All_Years/FeatureServer/0/query'
@@ -484,6 +505,7 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
+  const showParkClosure = activeChapter?.showParkClosure ?? false
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
@@ -630,6 +652,42 @@ export default function App() {
               />
             </Source>
           )}
+
+          {showParkClosure && (
+            <Source id="park-closure" type="geojson" data={PARK_CLOSURE_GEOJSON}>
+              <Layer
+                id="park-closure-fill"
+                type="fill"
+                paint={{
+                  'fill-color': '#16a34a',
+                  'fill-opacity': 0.15,
+                }}
+              />
+              <Layer
+                id="park-closure-outline"
+                type="line"
+                paint={{
+                  'line-color': '#16a34a',
+                  'line-width': 2,
+                  'line-opacity': 0.7,
+                  'line-dasharray': [4, 3],
+                }}
+              />
+            </Source>
+          )}
+
+          {showParkClosure && PARK_CLOSURE_MARKERS.map(({ id, longitude, latitude, label }) => (
+            <Marker key={id} longitude={longitude} latitude={latitude} anchor="center">
+              <div className="flex flex-col items-center gap-0.5">
+                <div className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg leading-tight tracking-wide uppercase">
+                  CLOSED
+                </div>
+                <div className="bg-white/90 text-gray-800 text-[9px] font-medium px-1.5 py-0.5 rounded shadow leading-none">
+                  {label}
+                </div>
+              </div>
+            </Marker>
+          ))}
 
           {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
             const Icon = chapter.icon
