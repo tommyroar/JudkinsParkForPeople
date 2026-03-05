@@ -13,6 +13,4 @@ mapState:
   bearing: 0
 ---
 
-Five targeted interventions, and Judkins Park transitions from an unsafe jumble of high-speed traffic to a transit-oriented neighborhood, following successful campaigns for [Roosevelt](https://nwgreenways.seattlegreenways.org/connections-to-light-rail/a-vision-for-roosevelt-way-n/) and U District stations, connecting the Central District to the new light rail era.
-
-Two RRFBs. Two roundabouts. One neighborhood ready for a walkable, transit-oriented future.
+While the city is justified in its focus on the "bottom" of the new Judkins Park light rail station, the "top" (home to the namesake park) has received **ZERO** improvements outside of parking enforcement. Contact your local representative ([Joy.Hollingsworth@seattle.gov](mailto:Joy.Hollingsworth@seattle.gov)) and insist that we put the *park* in Judkins Park, and make this a safe place for people to move without a car. 

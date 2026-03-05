@@ -17,7 +17,7 @@ marker:
 ---
 
 This crosswalk at 20th Ave South & Weller Street is within 200 yards of **two schools** (Washington Middle and MMSC Day School &
-Seattle Jewish Montessori). Washington Middle was the site of the [tragic death of a student](https://www.capitolhillseattle.com/2025/03/community-raises-funds-for-family-of-student-killed-by-runaway-suv-as-officials-look-at-street-safety-around-washington-middle-school/) who was run over by a car on school property in 2025, after which **no changes** were made to the existing pedestrian infrastructure.
+Seattle Jewish Montessori). One year ago, Washington Middle was the site of the [tragic death of a student](https://www.capitolhillseattle.com/2025/03/community-raises-funds-for-family-of-student-killed-by-runaway-suv-as-officials-look-at-street-safety-around-washington-middle-school/) who was run over by a car on school property, **during school hours**, after which *no changes* were made to the existing pedestrian infrastructure.
 
 Proposal: A **[Rectangular Rapid Flashing Beacon](https://safety.fhwa.dot.gov/provencountermeasures/rrfb.cfm)** (RRFB) — a pedestrian-activated amber flasher at the crosswalk.
 
