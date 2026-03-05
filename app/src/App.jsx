@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
+import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
@@ -504,8 +504,10 @@ export default function App() {
           initialViewState={CHAPTERS[0].mapState}
           mapStyle="mapbox://styles/mapbox/streets-v12"
           style={{ width: '100%', height: '100%' }}
+          scrollZoom={false}
           onLoad={handleMapLoad}
         >
+          <NavigationControl showCompass={false} position="bottom-left" />
           {collisionPointsVisible && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
               {/* Other (non-ped, non-serious) injuries: rendered beneath */}
