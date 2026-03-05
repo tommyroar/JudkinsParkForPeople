@@ -1,0 +1,34 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-122.3095, 47.5960],
+          [-122.2940, 47.5960],
+          [-122.2940, 47.5840],
+          [-122.3095, 47.5840],
+          [-122.3095, 47.5960]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "label": "Norman St" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.3010, 47.5840]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "label": "23rd Ave S" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.2940, 47.5900]
+      }
+    }
+  ]
+}

@@ -485,15 +485,11 @@ export default function App() {
   const activeChapterIdx = CHAPTERS.findIndex(c => c.id === activeChapterId)
   const showCorridor = activeChapter?.showCorridor ?? false
   const showCollisionPoints = activeChapter?.showCollisionPoints ?? false
-  const closureRect = activeChapter?.closureRect ?? null
-  const closureMarkers = activeChapter?.closureMarkers ?? null
-  const parkClosureGeoJSON = closureRect ? {
-    type: 'Feature',
-    geometry: {
-      type: 'Polygon',
-      coordinates: [[...closureRect, closureRect[0]]],
-    },
-  } : null
+  const closureGeoJSON = activeChapter?.closureGeoJSON ?? null
+  const closureMarkers = closureGeoJSON?.features.filter(f => f.geometry.type === 'Point') ?? []
+  const closurePolygon = closureGeoJSON
+    ? { ...closureGeoJSON, features: closureGeoJSON.features.filter(f => f.geometry.type === 'Polygon') }
+    : null
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
   const showProposals = activeChapterIdx >= 2
@@ -641,8 +637,8 @@ export default function App() {
             </Source>
           )}
 
-          {parkClosureGeoJSON && (
-            <Source id="park-closure" type="geojson" data={parkClosureGeoJSON}>
+          {closurePolygon && (
+            <Source id="park-closure" type="geojson" data={closurePolygon}>
               <Layer
                 id="park-closure-fill"
                 type="fill"
@@ -664,8 +660,8 @@ export default function App() {
             </Source>
           )}
 
-          {closureMarkers?.map(({ longitude, latitude, label }) => (
-            <Marker key={label} longitude={longitude} latitude={latitude} anchor="center">
+          {closureMarkers.map(({ geometry, properties }) => (
+            <Marker key={properties.label} longitude={geometry.coordinates[0]} latitude={geometry.coordinates[1]} anchor="center">
               <div className="flex flex-col items-center gap-1">
                 <div
                   className="flex items-center justify-center w-9 h-9 rounded-full shadow-lg"
@@ -674,7 +670,7 @@ export default function App() {
                   <Ban size={17} color="white" strokeWidth={2.5} />
                 </div>
                 <div className="bg-white/90 text-gray-800 text-[9px] font-medium px-1.5 py-0.5 rounded shadow leading-none">
-                  {label}
+                  {properties.label}
                 </div>
               </div>
             </Marker>
