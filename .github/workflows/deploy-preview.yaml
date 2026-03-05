@@ -14,8 +14,8 @@ permissions:
   deployments: write
 
 concurrency:
-  group: "preview-${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}"
-  cancel-in-progress: true
+  group: "github-pages"
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:

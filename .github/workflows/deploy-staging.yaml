@@ -12,7 +12,7 @@ permissions:
   deployments: write
 
 concurrency:
-  group: "github-pages-staging"
+  group: "github-pages"
   cancel-in-progress: false
 
 jobs:
