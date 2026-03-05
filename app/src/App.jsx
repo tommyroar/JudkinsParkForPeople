@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapbox'
+import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
@@ -507,7 +507,6 @@ export default function App() {
           scrollZoom={false}
           onLoad={handleMapLoad}
         >
-          <NavigationControl showCompass={false} position="top-right" />
           {collisionPointsVisible && collisionGeoJSON && (
             <Source id="collisions" type="geojson" data={collisionGeoJSON}>
               {/* Other (non-ped, non-serious) injuries: rendered beneath */}
@@ -707,6 +706,12 @@ export default function App() {
       {showProposals && !showCollisionPoints && <Legend />}
       {showCollisionPoints && <CollisionLegend />}
       <ReturnToStartButton visible={showReturnButton} onReturn={handleReturn} />
+
+      {/* Zoom controls */}
+      <div className="fixed top-3 right-3 z-40 flex flex-col rounded-lg overflow-hidden shadow-lg border border-gray-200">
+        <button onClick={() => mapRef.current?.zoomIn()} className="w-8 h-8 bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 text-lg font-light leading-none border-b border-gray-200">+</button>
+        <button onClick={() => mapRef.current?.zoomOut()} className="w-8 h-8 bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 text-lg font-light leading-none">−</button>
+      </div>
 
       {/* Scrollytelling story track */}
       <div className="relative z-30">
