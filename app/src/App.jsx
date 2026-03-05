@@ -3,7 +3,7 @@ import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronLeft, ChevronRight, ChevronsLeftRight } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
@@ -102,14 +102,13 @@ function IntroCard({ chapter }) {
 }
 
 function PhotoSlider({ photos }) {
-  const [pairIdx, setPairIdx] = useState(0)
+  const [selectedIdx, setSelectedIdx] = useState(0)
   const [pos, setPos] = useState(50)
   const containerRef = useRef(null)
   const dragging = useRef(false)
-  const pairCount = photos.length - 1
-
-  const front = photos[pairIdx]
-  const back = photos[pairIdx + 1]
+  const source = photos[0]
+  const overlays = photos.slice(1)
+  const overlay = overlays[selectedIdx]
 
   const updatePos = useCallback((clientX) => {
     if (!containerRef.current) return
@@ -133,7 +132,7 @@ function PhotoSlider({ photos }) {
     return () => el.removeEventListener('touchmove', onTouchMove)
   }, [updatePos])
 
-  const goTo = (i) => { setPairIdx(i); setPos(50) }
+  const selectOverlay = (i) => { setSelectedIdx(i); setPos(50) }
 
   return (
     <div className="mt-4">
@@ -144,33 +143,35 @@ function PhotoSlider({ photos }) {
         onTouchStart={(e) => { dragging.current = true; updatePos(e.touches[0].clientX) }}
         onTouchEnd={() => { dragging.current = false }}
       >
-        {/* Back image — fills full frame (right side visible) */}
-        <img src={back.src} alt={back.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} />
-        {/* Front image — clipped to left of handle */}
-        <img src={front.src} alt={front.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
+        {/* Right side: overlay/modification (full frame) */}
+        <img src={overlay.src} alt={overlay.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} />
+        {/* Left side: aerial source (clipped to left of handle) */}
+        <img src={source.src} alt={source.alt ?? ''} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
         {/* Divider + handle */}
         <div className="absolute top-0 bottom-0 w-px bg-white/90 shadow-[0_0_6px_rgba(0,0,0,0.5)] pointer-events-none z-10" style={{ left: `${pos}%` }}>
           <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 bg-white rounded-full shadow-xl flex items-center justify-center">
             <ChevronsLeftRight size={15} strokeWidth={2.5} className="text-gray-600" />
           </div>
         </div>
-        {/* Photo labels */}
-        {front.alt && <span className="absolute bottom-2 left-2 text-white text-xs font-medium bg-black/50 px-2 py-0.5 rounded pointer-events-none">{front.alt}</span>}
-        {back.alt && <span className="absolute bottom-2 right-2 text-white text-xs font-medium bg-black/50 px-2 py-0.5 rounded pointer-events-none text-right">{back.alt}</span>}
+        {/* Corner labels */}
+        <span className="absolute bottom-2 left-2 text-white text-xs font-medium bg-black/50 px-2 py-0.5 rounded pointer-events-none">{source.alt}</span>
+        <span className="absolute bottom-2 right-2 text-white text-xs font-medium bg-black/50 px-2 py-0.5 rounded pointer-events-none">{overlay.alt}</span>
       </div>
-      {pairCount > 1 && (
-        <div className="flex justify-center items-center gap-3 mt-2">
-          <button onClick={() => goTo((pairIdx - 1 + pairCount) % pairCount)} className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors" aria-label="Previous comparison">
-            <ChevronLeft size={16} strokeWidth={2.5} className="text-gray-500" />
-          </button>
-          <div className="flex gap-1.5">
-            {Array.from({ length: pairCount }).map((_, i) => (
-              <button key={i} onClick={() => goTo(i)} className={`w-2 h-2 rounded-full transition-colors ${i === pairIdx ? 'bg-blue-900' : 'bg-gray-300'}`} aria-label={`Comparison ${i + 1}`} />
-            ))}
-          </div>
-          <button onClick={() => goTo((pairIdx + 1) % pairCount)} className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors" aria-label="Next comparison">
-            <ChevronRight size={16} strokeWidth={2.5} className="text-gray-500" />
-          </button>
+      {overlays.length > 1 && (
+        <div className="flex gap-2 mt-2 flex-wrap">
+          {overlays.map((o, i) => (
+            <button
+              key={i}
+              onClick={() => selectOverlay(i)}
+              className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors ${
+                i === selectedIdx
+                  ? 'bg-blue-900 text-white border-blue-900'
+                  : 'bg-white text-gray-600 border-gray-300 hover:border-blue-900 hover:text-blue-900'
+              }`}
+            >
+              {o.alt}
+            </button>
+          ))}
         </div>
       )}
     </div>

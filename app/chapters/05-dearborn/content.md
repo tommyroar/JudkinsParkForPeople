@@ -16,13 +16,13 @@ marker:
   latitude: 47.5959
 photos:
   - src: aerial.jpg
-    alt: Aerial view of 20th Ave S at S Dearborn St
-  - src: IMG_3055.jpg
-    alt: 20th Ave S at S Dearborn St
-  - src: IMG_3056.jpg
-    alt: Looking south along 20th Ave S
+    alt: Aerial
   - src: IMG_3057.jpg
-    alt: Street conditions near S Dearborn St
+    alt: Roundabout
+  - src: IMG_3056.jpg
+    alt: Bulbouts + Stop Signs
+  - src: IMG_3055.jpg
+    alt: Mexican Tope
 ---
 
 20th & Dearborn is a high-speed cut-through for I-90 and Rainier Blvd traffic. This residential block carries thousands of vehicles daily, threatening families walking to Judkins Park and Garfield High School, and soon to include transit riders crossing 20th Ave S to the station. This is the site of numerous high speed collisions between unimpeded traffic on 20th Ave S and cars coming uphill on Dearborn. This despite the fact that all crossing streets here are "local only". Something needs to be done to cause cars to slow down and watch for pedestrians, instead of viewing them as barriers to traffic.
