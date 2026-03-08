@@ -30,7 +30,6 @@ photos:
 Beyond stop signs, the toolkit for pedestrian-priority traffic calming includes:
 
 - **Raised crosswalks** — table-top crossing at sidewalk grade; cars must slow to mount and descend, pedestrians never dip below grade
-- **Speed cushions** — NACTO-standard asphalt humps spaced every 200–300 ft, effective against cars while remaining passable for buses and emergency vehicles
 - **Curb extensions (bulb-outs)** — narrow the roadway at the crossing, reduce pedestrian exposure distance, and force turning vehicles to slow
 - **Diagonal diverter** — a planted median barrier that eliminates cut-through routing entirely while preserving local access
 - **Chicanes** — alternating parking bays and planting strips create natural S-curves that lower operating speeds without requiring a driver to stop
