@@ -23,7 +23,7 @@ photos:
     alt: Mexican Tope
 ---
 
-20th Ave S & Dearborn is a high-speed cut-through for I-90 and Rainier Blvd traffic, despite being marked "local traffic only". This residential block carries thousands of vehicles daily, threatening families walking to Judkins Park and local schools, and soon to include transit riders crossing 20th Ave S to the station. This is the site of numerous high-speed collisions between unimpeded traffic on 20th Ave S and cars coming uphill on Dearborn.
+20th Ave S & S Dearborn St is a high-speed cut-through for I-90 and Rainier Ave S traffic, despite being marked "local traffic only". This residential block carries thousands of vehicles daily, threatening families walking to Judkins Park and local schools, and soon to include transit riders crossing 20th Ave S to the station. This is the site of numerous high-speed collisions between unimpeded traffic on 20th Ave S and cars coming uphill on Dearborn.
 
 **Immediate action: stop signs.** Two additional stop signs on 20th Ave S prevent cars from reaching highway speeds through this residential block — simple, cheap, and implementable in days.
 

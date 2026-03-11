@@ -16,7 +16,7 @@
     },
     {
       "type": "Feature",
-      "properties": { "label": "Norman St" },
+      "properties": { "label": "S Norman St" },
       "geometry": {
         "type": "Point",
         "coordinates": [-122.306275, 47.593027]
