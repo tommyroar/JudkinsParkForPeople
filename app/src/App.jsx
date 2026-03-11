@@ -61,13 +61,12 @@ function interpolateAlongLine(coords, t) {
   return coords[coords.length - 1]
 }
 
-// 20th Ave S corridor — S Jackson to S Grand
+// 20th Ave S corridor — S Weller to S Grand
 const CORRIDOR_GEOJSON = {
   type: 'Feature',
   geometry: {
     type: 'LineString',
     coordinates: [
-      [-122.3067, 47.6037], // S Jackson St
       [-122.3058, 47.6012], // S Weller St
       [-122.3050, 47.5991], // S Dearborn St
       [-122.3044, 47.5965], // S Charles St

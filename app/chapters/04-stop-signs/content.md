@@ -25,4 +25,6 @@ The cheapest traffic calming tool in existence is a stop sign. A single sign, in
 
 Under the MUTCD, an all-way stop is warranted wherever pedestrian volumes and crash history justify it. The collision data makes the case overwhelming. This corridor has **264 pedestrian crashes** in the past decade. Three stop signs and three crosswalks won't solve everything — but they will force every driver to come to a full stop at the three points where pedestrians are most exposed, and give pedestrians a clearly defined place to cross.
 
+We know this can be done because SDOT is finally installing a stop sign at **20th Ave S & S Weller St** — more than a year after a student was run over at that intersection. One sign. One year. There is no engineering reason it took that long. If SDOT can do Weller, they can do these three tomorrow.
+
 **Total cost: under $6,500. Total time: a few days of crew work.** No environmental review, no design phase, no multi-year capital project. Just signs, posts, and paint. Everything else in this plan builds on top of this foundation — but this is where it starts.
