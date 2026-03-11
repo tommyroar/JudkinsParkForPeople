@@ -27,4 +27,6 @@ Under the MUTCD, an all-way stop is warranted wherever pedestrian volumes and cr
 
 We know this can be done because SDOT is finally installing a stop sign at **20th Ave S & S Weller St** — more than a year after a student was run over at that intersection. One sign. One year. There is no engineering reason it took that long. If SDOT can do Weller, they can do these three tomorrow.
 
+SDOT has shown it can act quickly when it wants to. Through its [Near-Term Crossing Improvements](https://www.seattle.gov/transportation/projects-and-programs/current-projects/i-90_judkins-park-station-near-term-crossing-improvements) project, the city installed raised crosswalks and rapid flashing beacons at three I-90 on- and off-ramps along **Rainier Ave S** — important work for station access on that side. But every improvement so far has been on Rainier. On 20th Ave S, where the same station riders walk through a half-mile of uncontrolled road, SDOT has done nothing beyond the single Weller stop sign.
+
 **Total cost: under $6,500. Total time: a few days of crew work.** No environmental review, no design phase, no multi-year capital project. Just signs, posts, and paint. Everything else in this plan builds on top of this foundation — but this is where it starts.
