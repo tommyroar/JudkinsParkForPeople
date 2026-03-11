@@ -6,14 +6,11 @@ subtitle: 'Three Signs • Three Crossings • Immediate Safety'
 icon: Octagon
 color: '#dc2626'
 mapState:
-  longitude: -122.3050
-  latitude: 47.5940
+  longitude: -122.3053
+  latitude: 47.5941
   zoom: 15.5
   pitch: 35
   bearing: 0
-marker:
-  longitude: -122.3050
-  latitude: 47.5940
 ---
 
 The cheapest traffic calming tool in existence is a stop sign. A single sign, installed, costs the city roughly **$600**. Three stop signs on 20th Ave S would transform the most dangerous half-mile pedestrian corridor near Judkins Park — and SDOT can do it in days, not years.
