@@ -20,7 +20,7 @@ The cheapest traffic calming tool in existence is a stop sign. A single sign, in
 
 **Three crossings need stop signs now:**
 
-- **20th Ave S & S Dearborn St** — the first major crossing south of Jackson, where families heading to Bailey Gatzert Elementary meet cut-through traffic with nothing to slow it down.
+- **20th Ave S & S Dearborn St** — the first major crossing south of Jackson, where cut-through traffic, including heavy trucks, barrels through with nothing to slow it down.
 - **20th Ave S & S Charles St** — the gateway between Judkins Park's north and south halves, where children, joggers, and dog walkers cross a street that currently treats them as invisible.
 - **20th Ave S & the park path to Judkins Park Station** — hundreds of light rail riders will cross here daily. Right now there is no sign, no marking, and no signal telling drivers to yield.
 
