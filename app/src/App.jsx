@@ -491,7 +491,7 @@ export default function App() {
     : null
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
-  const showProposals = activeChapterIdx >= 2
+  const showProposals = activeChapterIdx >= 3
 
   return (
     <div className="relative">
@@ -677,7 +677,8 @@ export default function App() {
 
           {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
             const stopSignTargets = ['dearborn', 'park', 'station']
-            const useStopSign = activeChapterId === 'stop-signs' && stopSignTargets.includes(chapter.id)
+            const chapterIndex = CHAPTERS.findIndex(c => c.id === chapter.id)
+            const useStopSign = stopSignTargets.includes(chapter.id) && chapterIndex > activeChapterIdx
             const Icon = useStopSign ? Octagon : chapter.icon
             const color = useStopSign ? '#dc2626' : chapter.color
             const isActive = activeChapterId === chapter.id || useStopSign
