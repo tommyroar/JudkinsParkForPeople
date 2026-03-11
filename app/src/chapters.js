@@ -1,6 +1,6 @@
-import { Navigation, AlertTriangle, Train, RotateCcw, Trees, MapPin } from 'lucide-react'
+import { Navigation, AlertTriangle, Train, RotateCcw, Trees, MapPin, Octagon } from 'lucide-react'
 
-const ICON_MAP = { Navigation, AlertTriangle, Train, RotateCcw, Trees, MapPin }
+const ICON_MAP = { Navigation, AlertTriangle, Train, RotateCcw, Trees, MapPin, Octagon }
 
 const modules = import.meta.glob('../chapters/*/content.md', { eager: true })
 const photoModules = import.meta.glob('../chapters/**/*.{jpg,jpeg,png,webp}', { eager: true, query: '?url', import: 'default' })

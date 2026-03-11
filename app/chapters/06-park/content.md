@@ -4,7 +4,7 @@ type: chapter
 title: Park Integration
 subtitle: 'Roundabout • 20th Ave S & S Charles St'
 icon: RotateCcw
-color: '#1e3a8a'
+color: '#16a34a'
 mapState:
   longitude: -122.3062
   latitude: 47.5944

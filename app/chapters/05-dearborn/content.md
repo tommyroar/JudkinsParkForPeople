@@ -4,7 +4,7 @@ type: chapter
 title: Flow Control
 subtitle: 'Stop Signs Now • 20th Ave S & S Dearborn St'
 icon: AlertTriangle
-color: '#1e3a8a'
+color: '#16a34a'
 mapState:
   longitude: -122.3061
   latitude: 47.5959

@@ -3,7 +3,7 @@ import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban, Octagon } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
 
@@ -61,13 +61,12 @@ function interpolateAlongLine(coords, t) {
   return coords[coords.length - 1]
 }
 
-// 20th Ave S corridor — S Jackson to S Grand
+// 20th Ave S corridor — S Weller to S Grand
 const CORRIDOR_GEOJSON = {
   type: 'Feature',
   geometry: {
     type: 'LineString',
     coordinates: [
-      [-122.3067, 47.6037], // S Jackson St
       [-122.3058, 47.6012], // S Weller St
       [-122.3050, 47.5991], // S Dearborn St
       [-122.3044, 47.5965], // S Charles St
@@ -492,7 +491,7 @@ export default function App() {
     : null
   const collisionOpacity = showCollisionPoints ? 1 : (activeChapterIdx >= 2 && activeChapterIdx <= 6) ? 0.75 : 0
   const collisionPointsVisible = collisionOpacity > 0
-  const showProposals = activeChapterIdx >= 2
+  const showProposals = activeChapterIdx >= 3
 
   return (
     <div className="relative">
@@ -677,8 +676,12 @@ export default function App() {
           ))}
 
           {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
-            const Icon = chapter.icon
-            const isActive = activeChapterId === chapter.id
+            const stopSignTargets = ['dearborn', 'park', 'station']
+            const chapterIndex = CHAPTERS.findIndex(c => c.id === chapter.id)
+            const useStopSign = stopSignTargets.includes(chapter.id) && chapterIndex > activeChapterIdx
+            const Icon = useStopSign ? Octagon : chapter.icon
+            const color = useStopSign ? '#dc2626' : chapter.color
+            const isActive = activeChapterId === chapter.id || useStopSign
             return (
               <Marker
                 key={chapter.id}
@@ -689,7 +692,7 @@ export default function App() {
                 <div
                   className="flex items-center justify-center w-9 h-9 rounded-full shadow-lg"
                   style={{
-                    backgroundColor: chapter.color,
+                    backgroundColor: color,
                     transform: isActive ? 'scale(1.3)' : 'scale(1)',
                     transition: 'transform 0.3s ease',
                   }}
