@@ -3,7 +3,7 @@ import Map, { Marker, Source, Layer } from 'react-map-gl/mapbox'
 import { Scrollama, Step } from 'react-scrollama'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban } from 'lucide-react'
+import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban, Octagon } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
 
@@ -677,8 +677,11 @@ export default function App() {
           ))}
 
           {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
-            const Icon = chapter.icon
-            const isActive = activeChapterId === chapter.id
+            const stopSignTargets = ['dearborn', 'park', 'station']
+            const useStopSign = activeChapterId === 'stop-signs' && stopSignTargets.includes(chapter.id)
+            const Icon = useStopSign ? Octagon : chapter.icon
+            const color = useStopSign ? '#dc2626' : chapter.color
+            const isActive = activeChapterId === chapter.id || useStopSign
             return (
               <Marker
                 key={chapter.id}
@@ -689,7 +692,7 @@ export default function App() {
                 <div
                   className="flex items-center justify-center w-9 h-9 rounded-full shadow-lg"
                   style={{
-                    backgroundColor: chapter.color,
+                    backgroundColor: color,
                     transform: isActive ? 'scale(1.3)' : 'scale(1)',
                     transition: 'transform 0.3s ease',
                   }}
