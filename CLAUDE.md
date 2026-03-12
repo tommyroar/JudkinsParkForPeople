@@ -2,12 +2,12 @@
 
 **CRITICAL: All deployments must follow the deployment protocol below and the issue protocol.**
 
-## Deployment Overview
+## Deployment
 
-Two deployment workflows exist:
+Two workflows:
 
-1. **Staging Preview** (`deploy-staging.yaml`): Auto-deploys on any Pull Request targeting `main`. After deploy, posts a PR comment with the staging URL. Verify at `https://judkinsparkforpeople.org/staging/`.
-2. **Production** (`deploy-spa.yaml`): Auto-deploys on merge to `main`. Verify at `https://tommyroar.github.io/JudkinsParkForPeople/`.
+1. **Staging** (`deploy-staging.yaml`): Auto-deploys on PRs to `main`. Takes a Playwright screenshot and posts the staging URL + screenshot artifact as a PR comment. Warns when one PR's staging overwrites another's (single shared `/staging/` directory). Verify at `https://judkinsparkforpeople.org/staging/`.
+2. **Production** (`deploy-spa.yaml`): Auto-deploys on merge to `main`. Verify at `https://judkinsparkforpeople.org/`.
 
 ## Project Structure
 
@@ -53,7 +53,7 @@ When performing development or deployment tasks:
 1. **Branch isolation**: Develop on a descriptive feature branch. Never commit directly to `main`.
 2. **Verify domain coexistence**: All workflow changes must preserve `keep_files: true` to prevent the production root and `staging/` directory from overwriting each other on `gh-pages`.
 3. **Merging PRs**: Do not merge PRs unless explicitly instructed by the user (e.g. "merge the PR"). When instructed, use `gh pr merge --merge`.
-4. **Run tests before opening PRs**: `cd app && npm test && npm run lint`
+3. **Run tests before opening PRs**: `cd app && npm test && npm run lint`
 
 ## Issue Lifecycle
 
@@ -68,12 +68,12 @@ When performing development or deployment tasks:
 
 ### Phase 3: Pull Request & Staging
 1. Open a PR to `main`, using `Fixes #N` or `Closes #N` in the PR body.
-2. `deploy-staging.yaml` triggers automatically and posts the staging URL.
+2. `deploy-staging.yaml` triggers automatically, deploys to `/staging/`, takes a screenshot, and posts the URL as a PR comment.
 3. Respond to review feedback with new commits. Only merge when explicitly instructed.
 
 ### Phase 4: Deployment & Closure
-1. After the human merges to `main`, `deploy-spa.yaml` triggers automatically.
-2. Verify at `https://tommyroar.github.io/JudkinsParkForPeople/`.
+1. After merge to `main`, `deploy-spa.yaml` deploys automatically.
+2. Verify at `https://judkinsparkforpeople.org/`.
 3. Only close the issue after confirming production deployment succeeded.
 
 ## Scrollytelling Architecture

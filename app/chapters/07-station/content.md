@@ -2,7 +2,7 @@
 id: station
 type: chapter
 title: Station Access
-subtitle: 'RRFB • 21st Ave S & S Judkins St'
+subtitle: 'RRFB • S Judkins St'
 icon: AlertTriangle
 color: '#16a34a'
 mapState:

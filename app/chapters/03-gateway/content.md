@@ -2,7 +2,7 @@
 id: gateway
 type: chapter
 title: A Road Without Controls
-subtitle: 'Weller St → 23rd Ave S'
+subtitle: 'S Weller St → 23rd Ave S'
 icon: Navigation
 color: '#ea580c'
 mapState:
