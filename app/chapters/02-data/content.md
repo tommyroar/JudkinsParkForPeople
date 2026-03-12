@@ -14,10 +14,6 @@ mapState:
   bearing: -25
 ---
 
-Every dot on the map is a real crash — see the legend for color coding.
+Every dot on this map is a real crash. Within one mile of Judkins Park, SDOT recorded **8,794 collisions** between 2015 and 2025. **17 people killed. 247 seriously injured.** Pedestrians bear the worst of it: **264 crashes** involving people on foot, **10 dead**, **40 seriously injured**. These are not abstractions. These are our neighbors.
 
-Within one mile of Judkins Park, SDOT recorded **8,794 collisions** between 2015 and 2025. **17 people were killed. 247 were seriously injured.**
-
-Proportionally, pedestrians are hit the hardest: **264 crashes** involving people on foot left **10 dead** and **40 seriously injured** over the same period.
-
-*Source: [SDOT Collisions All Years](https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::sdot-collisions-all-years), City of Seattle Open Data Portal.*
+Source: [SDOT Collisions All Years](https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::sdot-collisions-all-years), City of Seattle Open Data Portal.

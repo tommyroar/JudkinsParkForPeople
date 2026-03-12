@@ -16,6 +16,4 @@ marker:
   latitude: 47.5944
 ---
 
-A majority of traffic entering the area is routing through the neighborhood after exiting I-90 onto Rainier Ave S, using the massive 15% incline up Charles St to 20th Ave S on their way to somewhere else. With only a 2-way stop for crossing cars, traffic backs up in all directions during bust periods, forcing cars to make dangerous decisions due to limited visibility and fast moving traffic along 20th Ave S.
-
-Proposal: A **signature roundabout** with public art and a planted median to calm and blend traffic coming from Rainier. Allow traffic entering the neighborhood to blend with through traffic, and further slow down cars along 20th Ave S.
+Most traffic here is **cutting through** — exiting I-90 onto Rainier, climbing the steep Charles St hill to 20th Ave S, and passing through on the way to somewhere else. A 2-way stop can't handle it. Traffic backs up, visibility drops, and drivers make dangerous moves. A **signature roundabout** with public art and a planted median would calm traffic, blend turning movements safely, and further slow cars on 20th Ave S.
