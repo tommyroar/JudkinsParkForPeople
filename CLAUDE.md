@@ -4,13 +4,16 @@
 
 ## Deployment
 
-One workflow: `deploy-spa.yaml` auto-deploys to GitHub Pages on merge to `main`. Verify at `https://judkinsparkforpeople.org/`.
+Two workflows:
+
+1. **Staging** (`deploy-staging.yaml`): Auto-deploys on PRs to `main`. Takes a Playwright screenshot and posts the staging URL + screenshot artifact as a PR comment. Warns when one PR's staging overwrites another's (single shared `/staging/` directory). Verify at `https://judkinsparkforpeople.org/staging/`.
+2. **Production** (`deploy-spa.yaml`): Auto-deploys on merge to `main`. Verify at `https://judkinsparkforpeople.org/`.
 
 ## Project Structure
 
 ```
 JudkinsParkForPeople/
-├── .github/workflows/       # CI/CD (deploy-spa.yaml)
+├── .github/workflows/       # CI/CD (deploy-spa.yaml, deploy-staging.yaml)
 ├── app/                     # Vite React SPA
 │   ├── src/
 │   │   ├── App.jsx          # Main scrollytelling component + CHAPTERS data
@@ -48,7 +51,8 @@ JudkinsParkForPeople/
 When performing development or deployment tasks:
 
 1. **Branch isolation**: Develop on a descriptive feature branch. Never commit directly to `main`.
-2. **Merging PRs**: Do not merge PRs unless explicitly instructed by the user (e.g. "merge the PR"). When instructed, use `gh pr merge --merge`.
+2. **Verify domain coexistence**: All workflow changes must preserve `keep_files: true` to prevent the production root and `staging/` directory from overwriting each other on `gh-pages`.
+3. **Merging PRs**: Do not merge PRs unless explicitly instructed by the user (e.g. "merge the PR"). When instructed, use `gh pr merge --merge`.
 3. **Run tests before opening PRs**: `cd app && npm test && npm run lint`
 
 ## Issue Lifecycle
@@ -62,9 +66,10 @@ When performing development or deployment tasks:
 2. Run `npm test` and `npm run lint` from `app/`.
 3. Fix any failures before opening a PR.
 
-### Phase 3: Pull Request
+### Phase 3: Pull Request & Staging
 1. Open a PR to `main`, using `Fixes #N` or `Closes #N` in the PR body.
-2. Respond to review feedback with new commits. Only merge when explicitly instructed.
+2. `deploy-staging.yaml` triggers automatically, deploys to `/staging/`, takes a screenshot, and posts the URL as a PR comment.
+3. Respond to review feedback with new commits. Only merge when explicitly instructed.
 
 ### Phase 4: Deployment & Closure
 1. After merge to `main`, `deploy-spa.yaml` deploys automatically.
