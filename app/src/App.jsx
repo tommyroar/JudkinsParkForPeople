@@ -675,7 +675,7 @@ export default function App() {
             </Marker>
           ))}
 
-          {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals)).map(chapter => {
+          {CHAPTERS.filter(c => c.marker && (c.icon === Train || showProposals) && !(c.id === 'station' && activeChapterId === 'umoja')).map(chapter => {
             const stopSignTargets = ['dearborn', 'park', 'station']
             const chapterIndex = CHAPTERS.findIndex(c => c.id === chapter.id)
             const useStopSign = stopSignTargets.includes(chapter.id) && chapterIndex > activeChapterIdx
