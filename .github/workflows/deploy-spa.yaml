@@ -2,47 +2,39 @@ name: Deploy Production
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
-  deployments: write
 
 concurrency:
-  group: "github-pages"
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: production
       url: https://judkinsparkforpeople.org/
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
         working-directory: app
 
-      - name: Build SPA (production)
-        run: npm run build -- --base=/ --outDir ../dist-production/
+      - run: npm run build -- --base=/ --outDir ../dist/
         working-directory: app
         env:
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
-      - name: Deploy to GitHub Pages (production)
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist-production
+          publish_dir: ./dist
           publish_branch: gh-pages
-          keep_files: true
