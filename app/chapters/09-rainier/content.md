@@ -6,8 +6,8 @@ subtitle: 'Bottom of Station • I-90 Ramps'
 icon: Train
 color: '#16a34a'
 mapState:
-  longitude: -122.3025
-  latitude: 47.5905
+  longitude: -122.30605
+  latitude: 47.59029
   zoom: 16.5
   pitch: 50
   bearing: -15
