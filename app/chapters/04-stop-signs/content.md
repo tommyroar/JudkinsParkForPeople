@@ -11,6 +11,9 @@ mapState:
   zoom: 15.5
   pitch: 35
   bearing: 0
+photos:
+  - src: weller-crossing.jpg
+    alt: Children waiting to cross 20th Ave S at Weller
 ---
 
 A stop sign costs **$600** installed. A painted crosswalk costs **$500–$1,500**. Three of each on 20th Ave S would transform the most dangerous pedestrian corridor near Judkins Park — at **20th & Dearborn**, **20th & Charles**, and **the park path to Judkins Park Station**. Marked crosswalks at stop-controlled intersections reduce pedestrian conflicts by up to **40%**. Total cost: **under $6,500**. Total time: **a few days of crew work**.

@@ -261,7 +261,15 @@ function ChapterCard({ chapter }) {
       <div className="text-gray-700 text-xs md:text-sm leading-snug md:leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
-      {chapter.photos?.length > 0 && <PhotoSlider photos={chapter.photos} />}
+      {chapter.photos?.length > 1 && <PhotoSlider photos={chapter.photos} />}
+      {chapter.photos?.length === 1 && (
+        <img
+          src={chapter.photos[0].src}
+          alt={chapter.photos[0].alt ?? ''}
+          className="mt-4 w-full rounded-xl shadow-md"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
+        />
+      )}
     </motion.div>
   )
 }
