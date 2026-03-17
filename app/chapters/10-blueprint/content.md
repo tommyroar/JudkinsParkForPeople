@@ -21,5 +21,6 @@ Rainier Ave got raised crosswalks and flashing beacons — proof that SDOT can b
 - **[SDOT Rainier Ave S Team](mailto:RainierAveS@Seattle.gov)** — the project team behind Rainier safety improvements
 - **[Angela Brady, Interim SDOT Director](mailto:684-Road@seattle.gov)** — leads the department delivering Vision Zero
 - **[Mayor Katie Wilson](mailto:mayor@seattle.gov)** — sets citywide transportation priorities
+- **[Gordon Padelford](https://www.seattlegreenways.org/)** — Wilson transition team (Transportation & Environment), Executive Director of [Seattle Streets Alliance](https://www.seattlegreenways.org/)
 
 Put the **park** in Judkins Park — make this a safe place for people to move without a car.
