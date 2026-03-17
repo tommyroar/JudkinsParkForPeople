@@ -13,7 +13,7 @@ mapState:
   bearing: 0
 ---
 
-Rainier Ave got raised crosswalks and flashing beacons — proof that SDOT can build safe crossings at this station. Now look at the top: **20th Ave S and the park itself** got **nothing**. No crosswalks, no beacons, no stop signs beyond the single one at Weller. Every dollar and every crew-hour went to the bottom while the namesake park side remains an uncontrolled road.
+Rainier Ave got raised crosswalks and flashing beacons — proof that SDOT can build safe crossings at this station. Now look at the top: **20th Ave S and the park itself** got **nothing**. No crosswalks, no beacons, no stop signs — not even the one planned for Weller. SDOT installed dozens of Restricted Parking Zone signs before a single new stop sign went in. Every dollar and every crew-hour went to the bottom while the namesake park side remains an uncontrolled road.
 
 **Demand better.** Contact these officials and insist the top of this station gets the same treatment as the bottom:
 
