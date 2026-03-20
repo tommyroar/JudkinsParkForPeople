@@ -24,6 +24,4 @@ mapStates:
     bearing: 20
 ---
 
-SDOT is installing a stop sign at S Weller St — but south of Weller, all the way to 23rd Ave S, there are **zero stop signs**. Nothing to slow cut-through traffic, including heavy trucks, from moving at speed through a residential neighborhood with hundreds of students walking to school.
-
-Between S Weller St and the crossing at 22nd Ave S, a distance of over half a mile, there are **zero signed or marked crosswalks**. Pedestrians heading to the new light rail station have no safe place to cross this street that has no right to be busy.
+South of the new Weller stop sign, 20th Ave S has **zero stop signs** and **zero marked crosswalks** for over half a mile — all the way to 23rd Ave S. Cut-through traffic, including heavy trucks, moves at speed through a residential neighborhood where hundreds of students walk to school. Pedestrians heading to the new light rail station have **no safe place to cross**.

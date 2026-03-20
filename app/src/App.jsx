@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import { Train, AlertTriangle, RotateCcw, ArrowUp, ChevronsLeftRight, Ban, Octagon } from 'lucide-react'
 import { CHAPTERS } from './chapters.js'
 import GATEWAY_ROUTE_GEOJSON from '../chapters/03-gateway/tracer-route.geojson'
+import COLLISION_GEOJSON from '../chapters/02-data/collisions.geojson'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
@@ -76,36 +77,6 @@ const CORRIDOR_GEOJSON = {
 }
 
 
-// Fetches all injury and fatality collision points (2015–present) within the 1-mile corridor bbox
-async function fetchCollisionPoints() {
-  const base = 'https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SDOT_Collisions_All_Years/FeatureServer/0/query'
-  const PAGE = 500
-  const params = new URLSearchParams({
-    where: "INCDTTM >= '2015-01-01' AND (INJURIES > 0 OR FATALITIES > 0)",
-    geometry: JSON.stringify({ xmin: -122.318, ymin: 47.582, xmax: -122.289, ymax: 47.611 }),
-    geometryType: 'esriGeometryEnvelope',
-    inSR: '4326',
-    spatialRel: 'esriSpatialRelIntersects',
-    outFields: 'INJURIES,SERIOUSINJURIES,FATALITIES,PEDCOUNT',
-    returnGeometry: 'true',
-    outSR: '4326',
-    f: 'geojson',
-    resultRecordCount: String(PAGE),
-  })
-  const features = []
-  let offset = 0
-  let done = false
-  while (!done) {
-    params.set('resultOffset', String(offset))
-    const res = await fetch(`${base}?${params}`)
-    const json = await res.json()
-    const page = json.features ?? []
-    features.push(...page)
-    if (page.length < PAGE) done = true
-    else offset += PAGE
-  }
-  return { type: 'FeatureCollection', features }
-}
 
 const LEGEND = [
   { label: 'RRFB', color: '#16a34a', icon: AlertTriangle },
@@ -261,7 +232,15 @@ function ChapterCard({ chapter }) {
       <div className="text-gray-700 text-xs md:text-sm leading-snug md:leading-relaxed prose prose-sm max-w-none">
         <ReactMarkdown components={MD_COMPONENTS}>{chapter.content}</ReactMarkdown>
       </div>
-      {chapter.photos?.length > 0 && <PhotoSlider photos={chapter.photos} />}
+      {chapter.photos?.length > 1 && <PhotoSlider photos={chapter.photos} />}
+      {chapter.photos?.length === 1 && (
+        <img
+          src={chapter.photos[0].src}
+          alt={chapter.photos[0].alt ?? ''}
+          className="mt-4 w-full rounded-xl shadow-md"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
+        />
+      )}
     </motion.div>
   )
 }
@@ -351,14 +330,9 @@ const FIRST_CHAPTER_ID = CHAPTERS[0].id
 export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(CHAPTERS[0].id)
   const [showReturnButton, setShowReturnButton] = useState(false)
-  const [collisionGeoJSON, setCollisionGeoJSON] = useState(null)
   const mapRef = useRef(null)
   const isReturningRef = useRef(false)
   const tracerAnimRef = useRef(null)
-
-  useEffect(() => {
-    fetchCollisionPoints().then(setCollisionGeoJSON).catch(console.error)
-  }, [])
 
   // Tron tracer animation for the gateway chapter
   useEffect(() => {
@@ -506,8 +480,8 @@ export default function App() {
           scrollZoom={false}
           onLoad={handleMapLoad}
         >
-          {collisionPointsVisible && collisionGeoJSON && (
-            <Source id="collisions" type="geojson" data={collisionGeoJSON}>
+          {collisionPointsVisible && COLLISION_GEOJSON && (
+            <Source id="collisions" type="geojson" data={COLLISION_GEOJSON}>
               {/* Other (non-ped, non-serious) injuries: rendered beneath */}
               <Layer
                 id="collision-circles-other"

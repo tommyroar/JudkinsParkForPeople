@@ -1,0 +1,26 @@
+---
+id: blueprint
+type: chapter
+title: The Full Blueprint
+subtitle: A Complete Transit Portal
+icon: MapPin
+color: '#1e3a8a'
+mapState:
+  longitude: -122.3039
+  latitude: 47.5944
+  zoom: 15
+  pitch: 30
+  bearing: 0
+---
+
+Rainier Ave got raised crosswalks and flashing beacons — proof that SDOT can build safe crossings at this station. Now look at the top: **20th Ave S and the park itself** got **nothing**. No crosswalks, no beacons, no stop signs — not even the one planned for Weller. SDOT installed dozens of Restricted Parking Zone signs before a single new stop sign went in. Every dollar and every crew-hour went to the bottom while the namesake park side remains an uncontrolled road.
+
+**Demand better.** Contact these officials and insist the top of this station gets the same treatment as the bottom:
+
+- **[Joy Hollingsworth](mailto:Joy.Hollingsworth@seattle.gov)** — District 3 City Council (Judkins Park's representative)
+- **[SDOT Rainier Ave S Team](mailto:RainierAveS@Seattle.gov)** — the project team behind Rainier safety improvements
+- **[Angela Brady, Interim SDOT Director](mailto:684-Road@seattle.gov)** — leads the department delivering Vision Zero
+- **[Mayor Katie Wilson](mailto:mayor@seattle.gov)** — sets citywide transportation priorities
+- **[Gordon Padelford](https://www.seattlegreenways.org/)** — Wilson transition team (Transportation & Environment), Executive Director of [Seattle Streets Alliance](https://www.seattlegreenways.org/)
+
+Put the **park** in Judkins Park — make this a safe place for people to move without a car.
