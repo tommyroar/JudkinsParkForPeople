@@ -9,7 +9,7 @@ describe('App', () => {
 
   it('shows the intro title', () => {
     render(<App />)
-    expect(screen.getByText("Seattle's Most Vibrant and Diverse")).toBeInTheDocument()
+    expect(screen.getByText('Judkins Park For People')).toBeInTheDocument()
   })
 
   it('shows the opening date in the intro', () => {
