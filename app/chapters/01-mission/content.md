@@ -1,7 +1,7 @@
 ---
 id: mission
 type: intro
-title: Judkins Park For People
+title: Seattle's Most Vibrant and Diverse
 icon: Train
 color: '#7c3aed'
 mapState:
@@ -15,4 +15,4 @@ marker:
   latitude: 47.590320
 ---
 
-The **Judkins Park Light Rail Station** opens March 28, 2026 — bringing thousands of daily riders to **Seattle's most vibrant and diverse** neighborhood. **The streets around it were built for cars. This is a proposal to change that.**
+The **Judkins Park Light Rail Station** opens March 28, 2026 — bringing thousands of daily riders to one of Seattle's most vibrant and diverse neighborhoods. **The streets around it were built for cars. This is a proposal to change that.**
