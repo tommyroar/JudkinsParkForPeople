@@ -1,7 +1,7 @@
 ---
 id: mission
 type: intro
-title: Seattle's Most Vibrant and Diverse
+title: Judkins Park For People
 icon: Train
 color: '#7c3aed'
 mapState:
